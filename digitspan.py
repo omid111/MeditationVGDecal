@@ -1,24 +1,26 @@
 #!/usr/bin/env python2
-"""spanboard.py:
-A simple Span-board psychological test using the PsychoPy python module. The 
+"""digitspan.py
+A simple Digit Span psychological test using the PsychoPy python module. The 
 test is comprised of two phases.
-  1. NUM_PRACTICE_TRIALS of practice rounds, each with stimuli presentation 
+  1. NUM_PRACTICE_TRIALS of practice rounds, each with number presentation 
      of length PRACTICE_TRIAL_LENGTH.
-  2. Actual rounds, beginning with a sequence of length one and continuing 
-    until the sequences of length SET_SIZE_MAX or the subject fails two rounds 
-    of the same n in a row. This will be repeated NUM_TRIALS times.
-The actual experiment is with ten blocks arranged in an irregular pattern in 
-front of the subject. The program then highlights a number of blocks for 
-HIGHLIGHT_TIME, in a sequence, and then there is ISI_TIME of a blank screen
-followed by asking the user to click on the blocks in the same order they 
-appeared.
+  3. Actual rounds, beginning with a sequence of lengths within the ranges 
+    REVERSE_RANGE and continuing until the sequences of length SET_SIZE_MAX or 
+    the subject fails three rounds. This will be repeated NUM_TRIALS times.
+  3. Actual rounds, beginning with a sequence of lengths within the ranges 
+    REVERSE_RANGE and continuing until the sequences of length SET_SIZE_MAX or 
+    the subject fails three rounds. The subject must recall in reverse order.
+    This will be repeated NUM_TRIALS times.
+In the actual experiment, the subject is presented with n digits, one at a 
+time, each presented for STIMULI_TIME seconds. Then the user is asked to recall
+the sequence using the number keypad on the computer.
 
 Command-Line Execution: Instead of entering the subject initlas through the
 psychopy gui, you can provide them as command line arguments when running 
 with the terminal.
 
 Log files:
-  All log files are placed in the directory data/X/spanboard.txt, where X is 
+  All log files are placed in the directory data/X/digitspan.txt, where X is 
   the initials of the participant. Each line of the log file describes 
   different actions occuring in the program. Here are the different possible 
   formats of each line in the log file:
@@ -40,7 +42,7 @@ After imports, there is a list of global variables that change various aspects
 of the program, modifiable to the administrators content.
 """
 from psychopy import visual,core,event,gui
-import random,numpy,sys,os
+import random,numpy,sys,os,pyaudio
 from datetime import datetime
 __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
@@ -51,23 +53,19 @@ __status__ = "Awaiting Approval from Research Mentor"
 
 # GLOBAL VARIABLE DECLARATIONS
 ISI_TIME = 1.000
-HIGHLIGHT_TIME = 0.8000 # time each square is highlighted during presentation
-SET_SIZE_MAX = 9  # from base number up to but not including top number
-NUM_TRIALS = 3
-NUM_SQUARES = 10
-SQUARE_SIZE = 3 # dimension for one side
-MINIMUM_DISTANCE_BETWEEN_SQUARES = 1
-SQUARE_COLOR = "DarkMagenta"
-SQUARE_HIGHLIGHT_COLOR = "DarkOrange"
+DIGIT_DISPLAY_TIME = 0.8000 # time each number is displayed
+FORWARD_RANGE = (3,9)
+REVERSE_RANGE = (2,9)
+NUM_TRIALS = 1
+DIGIT_SIZE = 12 # size of digits on screen display
 # practice trial options
 NUM_PRACTICE_TRIALS = 2
 PRACTICE_TRIAL_LENGTH = 3
-LETTERS=[]
 
 # Keep master time for whole program
 programTime = core.Clock()
 # log file location
-logFile = "spanboard.txt"
+logFile = "digitspan.txt"
 def main(argv):
   """Main method to be runned at beginning"""
   global logFile, programTime
@@ -109,22 +107,24 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Span-board Practice\n\nMemorize the sequence of blocks hightlighted on screen, and at the end of \nthe sequence, click them in the same sequence.\n\nClick to Continue")
+  instructions = visual.TextStim(win,text="Digit Span Practice\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nPress any key to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
-  # wait until mouse is pressed and released
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  # wait until a key is pressed
+  event.waitKeys()
   # begin practice trial
-
   for i in range(NUM_PRACTICE_TRIALS):
-    temp = beginSequenceandProbe(win, mouse, PRACTICE_TRIAL_LENGTH)
-    log(str(temp))
-    if temp[0]:
+    x = range(10)
+    random.shuffle(x)
+    for i in x[:PRACTICE_TRIAL_LENGTH]:
+      displayDigit(win,i)
+    sound.soundPyo()
+    temp = validateSequence(win,mouse)
+    if temp[0]==x[:PRACTICE_TRIAL_LENGTH]:
+      log("(True,"+str(PRACTICE_TRIAL_LENGTH)+","+str(temp[1])+")")
       feedback = visual.TextStim(win,text="Correct. Nice!")
     else:
+      log("(False,"+str(PRACTICE_TRIAL_LENGTH)+","+str(temp[1])+")")
       feedback = visual.TextStim(win,text="Incorrect.")
     feedback.draw()
     win.flip()
@@ -133,35 +133,71 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win, text="Span-board Test\n\nEnough practice.\n\n Click to continue.")
+  instructions = visual.TextStim(win,text="Digit Span Forward\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the same sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nPress any key to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  # wait until a key is pressed
+  event.waitKeys()
+  # begin practice trial
   for i in range(NUM_TRIALS):
-    lastFail = False
-    i = 1
-    while i<=SET_SIZE_MAX:
-      temp = beginSequenceandProbe(win, mouse, i)
-      log(str(temp))
-      if temp[0]:
+    numFails = 0
+    i = FORWARD_RANGE[0]
+    while i <= FORWARD_RANGE[1]:
+      x = range(10)
+      random.shuffle(x)
+      for dig in x[:i]:
+        displayDigit(win,dig)
+      temp = validateSequence(win,mouse)
+      if temp[0]==x[:i]:
+        log("(True,"+str(i)+","+str(temp[1])+")")
         feedback = visual.TextStim(win,text="Correct. Nice!")
-        lastFail = False
         i += 1
       else:
+        log("(False,"+str(i)+","+str(temp[1])+")")
         feedback = visual.TextStim(win,text="Incorrect.")
-        if lastFail:
+        if numFails == 3:
           feedback.draw()
-          win.flip()
           core.wait(1)
           break
-        lastFail = True
+        numFails += 1
       feedback.draw()
       win.flip()
       core.wait(1)
   ### SECTION 2 END
+
+  ### SECTION 3 BEGIN
+  log("Section 2")
+  instructions = visual.TextStim(win,text="Digit Span Reverse\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the reverse sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nPress any key to Continue",wrapWidth=40)
+  instructions.draw()
+  win.flip()
+  # wait until a key is pressed
+  event.waitKeys()
+  # begin practice trial
+  for i in range(NUM_TRIALS):
+    numFails = 0
+    i = REVERSE_RANGE[0]
+    while i <= REVERSE_RANGE[1]:
+      x = range(10)
+      random.shuffle(x)
+      for dig in x[:i]:
+        displayDigit(win,dig)
+      temp = validateSequence(win,mouse,reverse=" reverse")
+      if temp[0]==x[:i][::-1]:
+        log("(True,"+str(i)+","+str(temp[1])+")")
+        feedback = visual.TextStim(win,text="Correct. Nice!")
+        i += 1
+      else:
+        log("(False,"+str(i)+","+str(temp[1])+")")
+        feedback = visual.TextStim(win,text="Incorrect.")
+        if numFails == 3:
+          feedback.draw()
+          core.wait(1)
+          break
+        numFails += 1
+      feedback.draw()
+      win.flip()
+      core.wait(1)
+  ### SECTION 3 END
 
   log("END SUCCESS")
   logFile.close()
@@ -182,6 +218,82 @@ def quit():
   log(": ERROR! QUIT OUT OF SYSTEM")
   logFile.close()
   core.quit()
+
+def displayDigit(win,digit):
+  """Display number to screen.
+
+  Arguments:
+  @param win: psychopy Window to be used for display
+  @param digit: digit to be displayed
+  """
+  # randomize letter's indices
+  letter = visual.TextStim(win,text=str(digit))
+  letter.setHeight(DIGIT_SIZE)
+  letter.draw()
+  win.flip()
+  core.wait(DIGIT_DISPLAY_TIME)
+
+def validateSequence(win,mouse,reverse=''):
+  """Display a screen where users pick digits in the order they remember.
+  
+  Arguments:
+  @param win: psychopy Window to be used for display
+  @param mouse: psychopy Mouse used in display
+  
+  @return a tuple of the form: ([list of digits], time taken)
+  """
+  # numpad key values are prefixed with 'num_'
+  DIGIT_SET=['num_'+str(i) for i in range(10)] + [str(i) for i in range(10)]
+
+  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared using the number keypad.", pos=(0,10),wrapWidth=80)
+  submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
+  submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
+  backText = visual.TextStim(win,text="Back",pos=(-5,-5))
+  backButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
+  backButton.setPos((-5,-5))
+  submitButton.setPos((5,-5))
+  submitButton.setAutoDraw(True)
+  submitText.setAutoDraw(True)
+  backButton.setAutoDraw(True)
+  backText.setAutoDraw(True)
+  instructions.setAutoDraw(True)
+  instructions.draw()
+  submitButton.draw()
+  submitText.draw()
+  backButton.draw()
+  backText.draw()
+  win.flip()
+  timer = core.Clock()
+  numbers = []
+  clicked = []
+  while(True):
+    for key in event.getKeys(keyList=DIGIT_SET):
+      if len(key) > 1:
+        key = key[4]
+      if(key and key not in clicked):
+        clicked.append(key)
+        numbers.append(visual.TextStim(win,text=key,color="DarkMagenta",pos=(-10+2*len(numbers),0)))
+        numbers[-1].setAutoDraw(True)
+        numbers[-1].draw()
+        win.flip()
+    if(mouse.isPressedIn(backButton) and len(clicked) > 0):
+      clicked.remove(clicked[len(clicked)-1])
+      numbers[-1].setAutoDraw(False)
+      numbers.remove(numbers[-1])
+      win.flip()
+      core.wait(0.2)
+    if(mouse.isPressedIn(submitButton) or event.getKeys(keyList=['enter'])):
+      #erase display
+      for n in numbers:
+        n.setAutoDraw(False)
+      submitButton.setAutoDraw(False)
+      submitText.setAutoDraw(False)
+      backButton.setAutoDraw(False)
+      backText.setAutoDraw(False)
+      instructions.setAutoDraw(False)
+      return ([int(i) for i in clicked],timer.getTime())
+    if(event.getKeys(keyList=['q','escape'])):
+      quit()
 
 def beginSequenceandProbe(win, mouse, n):
   """Creates a random pattern of NUM_SQUARES squares of size SQUARE_SIZE 
