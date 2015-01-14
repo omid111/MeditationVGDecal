@@ -73,7 +73,7 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.1"
+__version__ = "1.2"
 __status__ = "Rough Draft"
 
 # GLOBAL VARIABLE DECLARATIONS
@@ -200,7 +200,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win, text="You will now be asked to perform a series of simple math problems. The math problem will be something like: (10*2) + 2 = ? When you think you know the answer to the math problem, click to go to the next page.You'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. If the problem is correct, respond True; if the answer is incorrect, respond False.Go at a steady and quick pace but try not to get any wrong.\n\n Click to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="You will now be asked to perform a series of simple math problems. The math problem will be something like:\n(10*2) + 2 = ? When you think you know the answer to the math problem, click to go to the next page. You'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. If the problem is correct, respond True; if the answer is incorrect, respond False. Go at a steady and quick pace but try not to get any wrong.\n\n Click to continue.",wrapWidth=30)
   while True:
     instructions.draw()
     win.flip()
@@ -224,7 +224,7 @@ def main(argv):
 
   ### SECTION 3 BEGIN
   log("Section 3")
-  instructions = visual.TextStim(win, text="You will now be shown a letter, then a math problem which you will need to do, then another letter, and then another math problem, and so on. Words and math problems will alternate. At some point, you will be asked to recall all the letters from the series. This means you should indicate the order in which the letters were presented. Being correct means that you click on the buttons in the same order the items appeared in the sequence. Any mistake (recalling too many items, recalling too few items, or recalling items in the wrong order) counts as a mistake. Your operation span score is valid only if you are more than 85% accurate in evaluating the math problems, so try to answer all of those problems correctly while trying also to remember the order of the letters. This task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best. \n\nClick to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="You will now be shown letters and math problems alternating. At some point, you will be asked to recall all the letters from the series, indicating the order in which the letters were presented.\n\nAny mistake (recalling too many items, too few items, or items in the wrong order) counts as a mistake. Your operation span score is valid only if you are at least 85% accurate in evaluating the math problems, so try to answer all of those problems correctly while trying also to remember the order of the letters.\n\nThis task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best. \n\nClick to continue.",wrapWidth=30)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -335,19 +335,6 @@ def quit():
   log(": ERROR! QUIT OUT OF SYSTEM")
   logFile.close()
   core.quit()
-
-def sine(frequency, length, rate):
-  """Simple sine stream for monotones."""
-  length = int(length * rate)
-  factor = float(frequency) * (math.pi * 2) / rate
-  return numpy.sin(numpy.arange(length) * factor)
-
-def play_tone(stream, frequency=440, length=1, rate=44100):
-  """Play a stream of sound for use with pyaudio"""
-  chunks = []
-  chunks.append(sine(frequency, length, rate))
-  chunk = numpy.concatenate(chunks) * 0.25
-  stream.write(chunk.astype(numpy.float32).tostring())
 
 def makeresultsplot(name, xtext, ytext, xvalues, yvalues, yvalues2):
   """A simple plotter using matplotlib. 
@@ -546,7 +533,7 @@ def validateSequence(win, mouse,mathpercentage):
   perc = None
   if mathpercentage != -1:
     colo = "Green" if mathpercentage >= 85 else "Red"
-    perc = visual.TextStim(win,text=("Math Score: %.0f%%" % (mathpercentage)),color=colo,pos=(12,10))
+    perc = visual.TextStim(win,text=("Math Score: %.0f%%" % (mathpercentage)),color=colo,pos=(12,-9))
     perc.draw()
     perc.setAutoDraw(True)
   submitButton.setPos((5,-5))
