@@ -118,7 +118,7 @@ def main(argv):
     os.mkdir("data")
   if not os.path.isdir("data/"+initials):
     os.mkdir("data/"+initials)
-  logFile = open("data/"+initials+"/"+logFile,"w+")
+  logFile = open("data/"+initials+"/"+logFile+str(testNo)+".txt","w+")
   log(datetime.now().strftime("%d/%m/%y %H:%M"))
   log("Subject: " + initials)
   log("Test Number: " + str(testNo))
