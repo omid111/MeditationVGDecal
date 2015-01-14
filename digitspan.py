@@ -131,7 +131,7 @@ def main(argv):
   mouse = event.Mouse(win=win)
   winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
   losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
-  loadSoundFiles()
+  #loadSoundFiles()
 
   ### SECTION 1 BEGIN
   log("Section 1")
@@ -214,8 +214,8 @@ def main(argv):
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxForSpan[-1])).draw()
         win.flip()
-        log("Max Forward Digit Span BLOCK "+block+": " + str(maxForSpan[-1]))
-        core.wait(IN_BETWEEN_TRIALS_LENGTH)
+        log("Max Forward Digit Span BLOCK "+str(block)+": " + str(maxForSpan[-1]))
+        core.wait(5)
         break
       win.flip()
       core.wait(TONE_LENGTH)
@@ -265,8 +265,8 @@ def main(argv):
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max reverse Digit-Span was {0}".format(maxRevSpan[-1])).draw()
         win.flip()
-        log("Max Reverse Digit Span BLOCK "+block+": " + str(maxRevSpan[-1]))
-        core.wait(IN_BETWEEN_TRIALS_LENGTH)
+        log("Max Reverse Digit Span BLOCK "+str(block)+": " + str(maxRevSpan[-1]))
+        core.wait(5)
         break
       win.flip()
       core.wait(TONE_LENGTH)
@@ -277,16 +277,19 @@ def main(argv):
 
   dfscores = []
   drscores = []
-  for key in results_overall.keys():
+  for key in results_forward.keys():
     dfscores.append((100.0*sum(results_forward[key]))/NUM_TRIAL_BLOCKS)
+  for key in results_reverse.keys():
     drscores.append((100.0*sum(results_reverse[key]))/NUM_TRIAL_BLOCKS)
-  visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_overall.keys(),dfscores,drscores)).draw()
+  visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_forward.keys(),results_reverse.keys(),dfscores,drscores)).draw()
   win.flip()
   core.wait(8)
+  print dfscores
+  print drscores
 
   # write results to a xls file with all other subjects
   import xlrd,xlwt,xlutils.copy
-  excelfile = "data/ospan.xls"
+  excelfile = "data/digitspan.xls"
   if not os.path.isfile(excelfile):
     w = xlwt.Workbook()
     ws = w.add_sheet("Data")
@@ -307,8 +310,6 @@ def main(argv):
   newfile.save(excelfile)
 
   log("END SUCCESS")
-  pystream.close()
-  pysound.terminate()
   logFile.close()
   core.quit()
   # end of main
@@ -345,10 +346,10 @@ def displayDigit(win,digit):
   letter.setHeight(DIGIT_SIZE)
   letter.draw()
   win.flip()
-  soundFiles[digit].play()
+  #soundFiles[digit].play()
   core.wait(DIGIT_DISPLAY_TIME)
 
-def makeresultsplot(name, xtext, ytext, xvalues, yvalues, yvalues2):
+def makeresultsplot(name, xtext, ytext, xvalues, xvalues2, yvalues, yvalues2):
   """A simple plotter using matplotlib. 
 
   Arguments:
@@ -365,11 +366,11 @@ def makeresultsplot(name, xtext, ytext, xvalues, yvalues, yvalues2):
   fig = plt.figure()
   ax = fig.add_subplot(111)
   ax.plot(xvalues,yvalues,marker='o',label="Forward Digit Span")
-  ax.plot(xvalues,yvalues2,marker='o',label="Reverse Digit Span")
+  ax.plot(xvalues2,yvalues2,marker='o',label="Reverse Digit Span")
   plt.xlabel(xtext)
   plt.ylabel(ytext)
   plt.legend()
-  plt.axis([SET_SIZES[0],SET_SIZES[1],0,100])
+  plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,100])
   plt.title("Graph of performance")
   plt.savefig(dataPath+str(name)+".png")
   return dataPath+str(name)+".png"
@@ -428,11 +429,15 @@ def validateSequence(win,mouse,reverse=''):
   letterRects = []
   letterBoxes = []
   i = 0
-  LETTERS = ["0","1","2","3","4","5","6","7","8","9"]
+  LETTERS = ["1","2","3","4","5","6","7","8","9","0"]
   for i in range(len(LETTERS)):
-    letterBoxes.append(visual.TextStim(win, text=LETTERS[i], pos=(6*(-1.5+(i/3)),4*((i%3)))))
+    if LETTERS[i] == "0":
+      tpos = (4*(-1.0+((i+1)%3)),3*(2.5-((i+1)/3)))
+    else:
+      tpos = (4*(-1.0+(i%3)),3*(2.5-(i/3)))
+    letterBoxes.append(visual.TextStim(win, text=LETTERS[i], pos=tpos))
     letterRects.append( visual.Rect(win,width=1.2,height=1.2,lineWidth=2))
-    letterRects[i].setPos((6*(-1.5+(i/3)),4*(-0.03+(i%3))))
+    letterRects[i].setPos(tpos)
     letterRects[i].setAutoDraw(True)
     letterBoxes[i].setAutoDraw(True)
     letterRects[i].draw()
@@ -446,14 +451,18 @@ def validateSequence(win,mouse,reverse=''):
   clicked = []
   while(True):
     for i in range(len(LETTERS)):
-      if(mouse.isPressedIn(letterRects[i]) and i not in clicked):
-        clicked.append(i)
-        numbers.append(visual.TextStim(win,text=currentI,color="DarkMagenta",pos=(6*(-1.7+(i/3)),4*((i%3)))))
+      if(mouse.isPressedIn(letterRects[i]) and int(LETTERS[i]) not in clicked):
+        if LETTERS[i] == "0":
+          tpos = (-1+4*(-1.0+((i+1)%3)),3*(2.5-((i+1)/3)))
+        else:
+          tpos = (-1+4*(-1.0+(i%3)),3*(2.5-(i/3)))
+        clicked.append(int(LETTERS[i]))
+        numbers.append(visual.TextStim(win,text=currentI,color="DarkMagenta",pos=tpos))
         numbers[currentI-1].setAutoDraw(True)
         numbers[currentI-1].draw()
         currentI += 1
         win.flip()
-        numbers2.append(visual.TextStim(win,text=str(i),color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
+        numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
         numbers2[-1].setAutoDraw(True)
         numbers2[-1].draw()
         win.flip()
@@ -463,7 +472,7 @@ def validateSequence(win,mouse,reverse=''):
       numbers[currentI-1].setAutoDraw(False)
       numbers2[-1].setAutoDraw(False)
       numbers.remove(numbers[currentI-1])
-      numbersr2.remove(numbers2[-1])
+      numbers2.remove(numbers2[-1])
       win.flip()
       core.wait(0.2)
     if(mouse.isPressedIn(submitButton) or event.getKeys(keyList=['num_enter','return'])):
