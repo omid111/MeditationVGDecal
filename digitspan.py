@@ -14,7 +14,7 @@ test is comprised of two phases.
     order.  This will be repeated NUM_TRIAL_BLOCKS times.
 In the actual experiment, the subject is presented with n digits, one at a 
 time, each presented for STIMULI_TIME seconds. Then the user is asked to recall
-the sequence using the number keypad on the computer.
+the sequence.
 
 Correctness is measured for each trial as follows: 
   'XY' pairs where X is 'T' if the position of  sequence at that position is 
@@ -60,8 +60,8 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.1"
-__status__ = "Rough Draft"
+__version__ = "2.0"
+__status__ = "Almost Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 ISI_TIME = 1.000
@@ -69,9 +69,9 @@ IN_BETWEEN_DIGITS_TIME = 0.3
 DIGIT_DISPLAY_TIME = 0.8000 # time each number is displayed
 FORWARD_RANGE = (3,9)
 REVERSE_RANGE = (2,9)
-NUM_TRIAL_BLOCKS = 1
+NUM_TRIAL_BLOCKS = 3
 DIGIT_SIZE = 12 # size of digits on screen display
-MAX_FAILS = 1
+MAX_FAILS = 3
 CORRECT_FREQ = 440
 INCORRECT_FREQ = 330
 TONE_LENGTH = 0.5
@@ -117,7 +117,7 @@ def main(argv):
     print "Too many command line arguments. Please read documentation."
     sys.exit(1)
   initials = initials.upper()
-  dataPath = "data/"+initials+"/ospan"
+  dataPath = "data/"+initials+"/" + dataPath
 
   if not os.path.isdir("data"):
     os.mkdir("data")
@@ -135,10 +135,9 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Digit Span Practice\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Digit Span Practice\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click all of the numbers in the sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
-  # wait until a key is pressed
   while 1 not in mouse.getPressed():
     pass
   while 1 in mouse.getPressed():
@@ -173,7 +172,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Digit Span Forward\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the same sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nPress any key to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Digit Span Forward\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click the numbers in the same sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -197,7 +196,7 @@ def main(argv):
         core.wait(IN_BETWEEN_DIGITS_TIME)
       temp = validateSequence(win,mouse)
       correctSeq = x[:ss]
-      results_forward[ss].append(100*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
+      results_forward[ss].append(1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
         winsound.play()
@@ -224,7 +223,7 @@ def main(argv):
   ### SECTION 3 BEGIN
   log("Section 3")
   win.flip()
-  instructions = visual.TextStim(win,text="Digit Span Reverse\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, type all of the numbers into the keyboard in the reverse sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nPress any key to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Digit Span Reverse\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click all of the numbers in the reverse sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -248,7 +247,7 @@ def main(argv):
         core.wait(IN_BETWEEN_DIGITS_TIME)
       temp = validateSequence(win,mouse,reverse=" reverse")
       correctSeq = x[:ss][::-1]
-      results_reverse[ss].append(100*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
+      results_reverse[ss].append(1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
         winsound.play()
@@ -284,8 +283,6 @@ def main(argv):
   visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_forward.keys(),results_reverse.keys(),dfscores,drscores)).draw()
   win.flip()
   core.wait(8)
-  print results_forward, dfscores
-  print results_reverse, drscores
 
   # write results to a xls file with all other subjects
   import xlrd,xlwt,xlutils.copy
@@ -297,7 +294,7 @@ def main(argv):
     ws.write(0,0,"Initials",style)
     ws.write(0,1,"Day",style)
     ws.write(0,2,"Avg Forward Digit-SPAN",style)
-    ws.write(0,2,"Avg Reverse Digit-SPAN",style)
+    ws.write(0,3,"Avg Reverse Digit-SPAN",style)
     w.save(excelfile)
   oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
   row = oldfile.sheet_by_index(0).nrows
@@ -370,7 +367,7 @@ def makeresultsplot(name, xtext, ytext, xvalues, xvalues2, yvalues, yvalues2):
   plt.xlabel(xtext)
   plt.ylabel(ytext)
   plt.legend()
-  plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,100])
+  plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,101])
   plt.title("Graph of performance")
   plt.savefig(dataPath+str(name)+".png")
   return dataPath+str(name)+".png"
@@ -406,10 +403,7 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  # numpad key values are prefixed with 'num_'
-  DIGIT_SET=['num_'+str(i) for i in range(10)] + [str(i) for i in range(10)]
-
-  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared using the number keypad.", pos=(0,10),wrapWidth=80)
+  instructions = visual.TextStim(win,text="Click the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=80)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-5))
@@ -465,7 +459,7 @@ def validateSequence(win,mouse,reverse=''):
         numbers2[-1].setAutoDraw(True)
         numbers2[-1].draw()
         win.flip()
-    if (mouse.isPressedIn(backButton) or event.getKeys(keyList=['backspace'])) and len(clicked) > 0:
+    if mouse.isPressedIn(backButton) and len(clicked) > 0:
       currentI -= 1
       clicked.remove(clicked[len(clicked)-1])
       numbers[currentI-1].setAutoDraw(False)
@@ -474,7 +468,7 @@ def validateSequence(win,mouse,reverse=''):
       numbers2.remove(numbers2[-1])
       win.flip()
       core.wait(0.2)
-    if(mouse.isPressedIn(submitButton) or event.getKeys(keyList=['num_enter','return'])):
+    if(mouse.isPressedIn(submitButton)):
       #erase display
       for n in numbers+numbers2:
         n.setAutoDraw(False)
