@@ -159,7 +159,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Operational Span Practice\n\nYou will be shown a series of letters. Try to remember the letters in the order they are presented to you. You'll then be asked to reproduce the series at the end of the block.\n\nClick to Continue")
+  instructions = visual.TextStim(win,text="Operational Span Practice\n\nYou will be shown a series of letters. Try to remember the letters in the order they are presented to you. You'll then be asked to reproduce the series at the end of the trial.\n\nClick to Continue")
   instructions.draw()
   win.flip()
   # wait until mouse is pressed
@@ -270,9 +270,9 @@ def main(argv):
         losesound.play()
         numWrong += 1
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
-      if numWrong >= MAX_FAILS: # numWrong should always be one more than MAX_FAILS
+      if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
-        visual.TextStim(win,text="This block is over.").draw()
+        visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
         win.flip()
         log("Max O-SPAN: " + maxOspan[-1])
         core.wait(IN_BETWEEN_TRIALS_LENGTH)
