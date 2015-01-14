@@ -56,7 +56,7 @@ Log files:
     * "TIMESTAMP: ([true/fase],%f)" - indicates that a math problem has been 
       completed correctly if true, or incorrectly if false, in float %f time. 
     * "TIMESTAMP: ([true/false],[correct response],[subject response],
-      [accuracy],N,%f)" - indicates that a sequence of N letters has been 
+      [accuracy],N,%f)" - indicates that a sequence of N letters have been 
       completed in %f time, incorrectly if false, and correctly if true.
     * "TIMESTAMP: Max O-SPAN BLOCK X: Y" - maximum O-Span for block X is Y 
       letters.
@@ -91,7 +91,7 @@ IN_BETWEEN_LETTERS_TIME = 0.200
 CORRECT_FREQ = 440
 INCORRECT_FREQ = 330
 TONE_LENGTH = 0.5
-NUM_MATH_PROBLEMS = 1
+NUM_MATH_PROBLEMS = 15
 HIGHEST_NUMBER = 9
 # section 3 options
 SET_SIZES = (3,9) # from base number up to but not including top number
@@ -439,7 +439,6 @@ def mathQuestion(win,mouse,timelimit):
   question = visual.TextStim(win,text=questiontext,pos=(0,2))
   instructions.draw()
   question.draw()
-  mouse.setVisible(0)
   win.flip()
   timer = core.Clock()
   while 1 not in mouse.getPressed():
@@ -453,7 +452,6 @@ def mathQuestion(win,mouse,timelimit):
       quit()
   while 1 in mouse.getPressed():
     pass
-  mouse.setVisible(1)
   time = timer.getTime()
   correct = random.random()<MATH_QUESTION_CHANCE_CORRECT
   ans = answer
