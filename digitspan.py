@@ -278,14 +278,14 @@ def main(argv):
   dfscores = []
   drscores = []
   for key in results_forward.keys():
-    dfscores.append((100.0*sum(results_forward[key]))/NUM_TRIAL_BLOCKS)
+    dfscores.append((100.0*sum(results_forward[key]))/len(results_forward[key]))
   for key in results_reverse.keys():
-    drscores.append((100.0*sum(results_reverse[key]))/NUM_TRIAL_BLOCKS)
+    drscores.append((100.0*sum(results_reverse[key]))/len(results_reverse[key]))
   visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_forward.keys(),results_reverse.keys(),dfscores,drscores)).draw()
   win.flip()
   core.wait(8)
-  print dfscores
-  print drscores
+  print results_forward, dfscores
+  print results_reverse, drscores
 
   # write results to a xls file with all other subjects
   import xlrd,xlwt,xlutils.copy
@@ -306,7 +306,7 @@ def main(argv):
   sheet.write(row,0,initials)
   sheet.write(row,1,testNo)
   sheet.write(row,2,(1.0*sum(maxForSpan))/len(maxForSpan))
-  sheet.write(row,2,(1.0*sum(maxRevSpan))/len(maxRevSpan))
+  sheet.write(row,3,(1.0*sum(maxRevSpan))/len(maxRevSpan))
   newfile.save(excelfile)
 
   log("END SUCCESS")
@@ -461,7 +461,6 @@ def validateSequence(win,mouse,reverse=''):
         numbers[currentI-1].setAutoDraw(True)
         numbers[currentI-1].draw()
         currentI += 1
-        win.flip()
         numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
         numbers2[-1].setAutoDraw(True)
         numbers2[-1].draw()
