@@ -74,8 +74,8 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.2"
-__status__ = "Rough Draft"
+__version__ = "2.0"
+__status__ = "Almost Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 LETTERS=("F", "H", "J", "K", "L", "N", "P", "Q", "R", "S", "T", "Y")
@@ -140,7 +140,7 @@ def main(argv):
     print "Too many/few command line arguments. Please read documentation."
     sys.exit(1)
   initials = initials.upper()
-  dataPath = "data/"+initials+"/ospan"
+  dataPath = "data/"+initials+"/" + dataPath
 
   #if there is no folder data, make one
   if not os.path.isdir("data"):
@@ -215,8 +215,8 @@ def main(argv):
       core.wait(IN_BETWEEN_TRIALS_TIME)
     mathTimes = [mathTrials[i][1] for i in range(len(mathTrials))]
     mathTime = sum(mathTimes)/len(mathTimes) + 2.5*numpy.std(mathTimes)
-    mathPercentRight = (1.0 * sum([1 if mathTrials[i][0] else 0 for i in range(len(mathTrials))]))/len(mathTrials)
-    if(mathPercentRight > 0.85):
+    mathPercentRight = (100.0 * sum([1 if mathTrials[i][0]==True else 0 for i in range(len(mathTrials))]))/len(mathTrials)
+    if(mathPercentRight >= 85):
       break
     instructions = visual.TextStim(win, text="You did not answer > 85% of the math questions correctly. Please try your best. Try again. \n\nClick to continue")
   ### SECTION 2 END
@@ -251,10 +251,10 @@ def main(argv):
         core.wait(IN_BETWEEN_LETTERS_TIME)
         mathQuestions.append(mathQuestion(win,mouse,mathTime))
         log(str(mathQuestions[-1]))
-      mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0] else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
+      mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0]==True else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
       temp = validateSequence(win,mouse,mathPercentRight)
       correctSeq = [LETTERS[i] for i in x[:ss]]
-      results_overall[ss].append((100*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss),mathPercentRight))
+      results_overall[ss].append((1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss),mathPercentRight))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
         winsound.play()
@@ -272,7 +272,7 @@ def main(argv):
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
         win.flip()
         log("Max O-SPAN: " + str(maxOspan[-1]))
-        core.wait(IN_BETWEEN_TRIALS_LENGTH)
+        core.wait(IN_BETWEEN_TRIALS_TIME)
         break
       win.flip()
       core.wait(TONE_LENGTH)
@@ -286,7 +286,7 @@ def main(argv):
   mathscores = []
   for key in results_overall.keys():
     oscores.append((100.0*sum([i[0] for i in results_overall[key]]))/NUM_TRIAL_BLOCKS)
-    mathscores.append((100.0*sum([i[1] for i in results_overall[key]]))/NUM_TRIAL_BLOCKS)
+    mathscores.append((1.0*sum([i[1] for i in results_overall[key]]))/NUM_TRIAL_BLOCKS)
   visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_overall.keys(),oscores,mathscores)).draw()
   win.flip()
   core.wait(8)
@@ -354,7 +354,7 @@ def makeresultsplot(name, xtext, ytext, xvalues, yvalues, yvalues2):
   plt.xlabel(xtext)
   plt.ylabel(ytext)
   plt.legend()
-  plt.axis([SET_SIZES[0],SET_SIZES[1],0,100])
+  plt.axis([SET_SIZES[0],SET_SIZES[1],0,101])
   plt.title("Graph of performance")
   plt.savefig(dataPath+str(name)+".png")
   return dataPath+str(name)+".png"
@@ -467,12 +467,12 @@ def mathQuestion(win,mouse,timelimit):
       c += 1
     ans = a*b+c
   ans = visual.TextStim(win,text=str(ans))
-  trueText = visual.TextStim(win,text="True",pos=(3,-3))
+  trueText = visual.TextStim(win,text="True",pos=(-3,-3))
   trueButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
-  trueButton.setPos((3,-3))
-  falseText = visual.TextStim(win,text="False",pos=(-3,-3))
+  trueButton.setPos((-3,-3))
+  falseText = visual.TextStim(win,text="False",pos=(3,-3))
   falseButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
-  falseButton.setPos((-3,-3))
+  falseButton.setPos((3,-3))
   ans.draw()
   trueText.draw()
   trueButton.draw()
@@ -557,6 +557,7 @@ def validateSequence(win, mouse,mathpercentage):
   timer = core.Clock()
   currentI=1
   numbers = []
+  numbers2 = []
   clicked = []
   while(True):
     for i in range(len(LETTERS)):
@@ -566,17 +567,22 @@ def validateSequence(win, mouse,mathpercentage):
         numbers[currentI-1].setAutoDraw(True)
         numbers[currentI-1].draw()
         currentI += 1
+        numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
+        numbers2[-1].setAutoDraw(True)
+        numbers2[-1].draw()
         win.flip()
     if(mouse.isPressedIn(backButton) and currentI > 1):
       currentI -= 1
       clicked.remove(clicked[len(clicked)-1])
       numbers[currentI-1].setAutoDraw(False)
+      numbers2[-1].setAutoDraw(False)
       numbers.remove(numbers[currentI-1])
+      numbers2.remove(numbers2[-1])
       win.flip()
       core.wait(0.2)
     if(mouse.isPressedIn(submitButton)):
       #erase display
-      for n in numbers:
+      for n in numbers+numbers2:
         n.setAutoDraw(False)
       submitButton.setAutoDraw(False)
       submitText.setAutoDraw(False)
