@@ -53,8 +53,9 @@ Log files:
       subject is on. X must be an integer >= 1.
     * "TIMESTAMP: Section [1-3]" - indicates that section data follows until 
       the next "Section X".
-    * "TIMESTAMP: ([true/fase],%f)" - indicates that a math problem has been 
-      completed correctly if true, or incorrectly if false, in float %f time. 
+    * "TIMESTAMP: ([true/(speed/accuracy error)],%f)" - indicates that a math 
+      problem has been completed correctly if true, or incorrectly if false, 
+      in float %f time. 
     * "TIMESTAMP: ([true/false],[correct response],[subject response],
       [accuracy],N,%f)" - indicates that a sequence of N letters have been 
       completed in %f time, incorrectly if false, and correctly if true.
@@ -270,7 +271,7 @@ def main(argv):
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
         win.flip()
-        log("Max O-SPAN: " + maxOspan[-1])
+        log("Max O-SPAN: " + str(maxOspan[-1]))
         core.wait(IN_BETWEEN_TRIALS_LENGTH)
         break
       win.flip()
@@ -412,7 +413,7 @@ def mathQuestion(win,mouse,timelimit):
   @param timelimit: time limit in seconds for the math question to be displayed
                     before counting as incorrect.
 
-  @return a tuple of format: (true/false for correct response, time to answer)
+  @return a tuple of format: (true/error response, time to answer)
   """
   global lastMathProblem
   answer = -100
@@ -443,7 +444,7 @@ def mathQuestion(win,mouse,timelimit):
       instructions.draw()
       win.flip()
       core.wait(1)
-      return (False, timer.getTime())
+      return ("Speed Error", timer.getTime())
     if(event.getKeys(keyList=['q','escape'])):
       quit()
   while 1 in mouse.getPressed():
@@ -486,7 +487,7 @@ def mathQuestion(win,mouse,timelimit):
         tempLog = "(True,"
         winsound.play()
       else:
-        tempLog = "(False,"
+        tempLog = "(Accuracy Error,"
         losesound.play()
       win.flip()
       return (correct,time)
@@ -494,7 +495,7 @@ def mathQuestion(win,mouse,timelimit):
       while 1 in mouse.getPressed():
         pass
       if correct:
-        tempLog = "(False,"
+        tempLog = "(Accuracy Error,"
         losesound.play()
       else:
         tempLog = "(True,"
