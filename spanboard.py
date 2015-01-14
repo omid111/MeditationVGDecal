@@ -78,7 +78,7 @@ PRACTICE_TRIAL_LENGTH = 3
 programTime = core.Clock()
 # log file location
 logFile = "spanboard"
-dataFile = "spanboard"
+dataPath = "spanboard"
 squarePattern = []
 iPattern = 0
 def main(argv):
@@ -112,7 +112,7 @@ def main(argv):
     print "Too many/few command line arguments. Please read documentation."
     sys.exit(1)
   initials = initials.upper()
-  dataPath = "data/"+initials+"/spanboard"
+  dataPath = "data/"+initials+"/"+dataPath
 
   if not os.path.isdir("data"):
     os.mkdir("data")
@@ -180,7 +180,7 @@ def main(argv):
         results_overall[ss] = []
       temp = beginSequenceandProbe(win, mouse, ss)
       log(str(temp))
-      results_overall[ss].append(100*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in temp[3]])/(2.0*ss))
+      results_overall[ss].append(1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in temp[3]])/(2.0*ss))
       if temp[0]:
         winsound.play()
         maxSpanBoard[-1] = ss
@@ -192,7 +192,7 @@ def main(argv):
         numWrong += 1
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
-        visual.TextStim(win,text="This block is over. Your max Span-Board was {0}".format(maxSpanBoard[-1]) )
+        visual.TextStim(win,text="This block is over. Your max Span-Board was {0}".format(maxSpanBoard[-1]) ).draw()
         win.flip()
         log("Max Span-Board Block "+str(i)+": " + str(maxSpanBoard[-1]))
         core.wait(3)
@@ -271,7 +271,7 @@ def makeresultsplot(name, xtext, ytext, xvalues, yvalues):
   plt.xlabel(xtext)
   plt.ylabel(ytext)
   plt.legend()
-  plt.axis([SET_SIZES[0],SET_SIZES[1],0,100])
+  plt.axis([SET_SIZES[0],SET_SIZES[1]+3,0,101])
   plt.title("Graph of performance")
   plt.savefig(dataPath+str(name)+".png")
   return dataPath+str(name)+".png"
