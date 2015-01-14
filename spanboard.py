@@ -194,7 +194,7 @@ def main(argv):
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max Span-Board was {0}".format(maxSpanBoard[-1]) )
         win.flip()
-        log("Max Span-Board: " + str(maxSpanBoard[-1]))
+        log("Max Span-Board Block "+str(i)+": " + str(maxSpanBoard[-1]))
         core.wait(3)
         break
       win.flip()
@@ -361,7 +361,6 @@ def beginSequenceandProbe(win, mouse, n):
   #done creating irregular square pattern
   sequence = range(NUM_SQUARES)
   random.shuffle(sequence)
-  mouse.setVisible(0)
   for i in sequence[:n]:
     squares[i].setFillColor(SQUARE_HIGHLIGHT_COLOR)
     win.flip()
@@ -371,7 +370,6 @@ def beginSequenceandProbe(win, mouse, n):
   for square in squares:
     square.setAutoDraw(False)
   win.flip()
-  mouse.setVisible(1)
   core.wait(ISI_TIME)
   #begin asking for the subject to recall pattern
   for square in squares:

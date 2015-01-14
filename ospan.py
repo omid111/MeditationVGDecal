@@ -170,13 +170,12 @@ def main(argv):
   visual.TextStim(win,text="This is the sound of a correct response.").draw()
   win.flip()
   winsound.play()
-  core.wait(3)
+  core.wait(2)
   visual.TextStim(win,text="This is the sound of an incorrect response.").draw()
   win.flip()
   losesound.play()
-  core.wait(3)
+  core.wait(2)
   # begin practice trial
-  mouse.setVisible(0)
   for j in range(NUM_PRACTICE_TRIALS):
     x = [i for i in range(len(LETTERS))]
     random.shuffle(x)
@@ -184,7 +183,6 @@ def main(argv):
       displayLetter(win,LETTERS[i])
       win.flip()
       core.wait(IN_BETWEEN_LETTERS_TIME)
-    mouse.setVisible(1)
     temp = validateSequence(win,mouse,-1)
     win.flip()
     correctSeq = [LETTERS[i] for i in x[:NUM_PRACTICE_TRIAL_LETTERS]]
@@ -235,7 +233,7 @@ def main(argv):
   results_overall = dict()
   maxOspan = []
   for block in range(NUM_TRIAL_BLOCKS):
-    # set i at minimum set size
+# set i at minimum set size
     ss = SET_SIZES[0]
     numWrong = 0
     maxOspan.append(0)
@@ -244,7 +242,6 @@ def main(argv):
         results_overall[ss] = []
       x = [j for j in range(len(LETTERS))]
       random.shuffle(x)
-      mouse.setVisible(0)
       # display letters
       mathQuestions = []
       for j in x[:ss]:
@@ -253,7 +250,6 @@ def main(argv):
         core.wait(IN_BETWEEN_LETTERS_TIME)
         mathQuestions.append(mathQuestion(win,mouse,mathTime))
         log(str(mathQuestions[-1]))
-      mouse.setVisible(1)
       mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0] else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
       temp = validateSequence(win,mouse,mathPercentRight)
       correctSeq = [LETTERS[i] for i in x[:ss]]
@@ -521,7 +517,6 @@ def validateSequence(win, mouse,mathpercentage):
   
   @return a tuple of the form: ([list of letters], time taken)
   """
-  mouse.setVisible(1)
   instructions = visual.TextStim(win,text="Select the letters in the order they appeared.", pos=(0,10),wrapWidth=80)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
