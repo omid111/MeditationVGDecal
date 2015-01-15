@@ -131,7 +131,7 @@ def main(argv):
   mouse = event.Mouse(win=win)
   winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
   losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
-  #loadSoundFiles()
+  loadSoundFiles()
 
   ### SECTION 1 BEGIN
   log("Section 1")
@@ -324,7 +324,7 @@ def loadSoundFiles():
   """Load wav files from sounds directory for audio presentation."""
   global soundFiles
   for i in range(10):
-    soundFiles.append(sound.SoundPygame(value=str("sounds/female_"+str(i)+".mp3")))
+    soundFiles.append(sound.SoundPygame(value=str("sounds/female_"+str(i)+".wav")))
 
 def quit():
   """Quit the program, logging an error and then exiting."""
@@ -339,18 +339,19 @@ def displayDigit(win,digit):
   @param win: psychopy Window to be used for display
   @param digit: digit to be displayed
   """
-  letter = visual.TextStim(win,text=str(digit))
-  letter.setHeight(DIGIT_SIZE)
-  letter.draw()
+  #letter = visual.TextStim(win,text=str(digit))
+  #letter.setHeight(DIGIT_SIZE)
+  #letter.draw()
   win.flip()
-  #soundFiles[digit].play()
+  soundFiles[digit].setVolume(1)
+  soundFiles[digit].play()
   core.wait(DIGIT_DISPLAY_TIME)
 
 def makeresultsplot(name, xtext, ytext, xvalues, xvalues2, yvalues, yvalues2):
   """A simple plotter using matplotlib. 
 
   Arguments:
-  @param name - file name prefixed by 'ospan' for saving
+  @param name - file name prefixed by 'digitspan' for saving
   @param xtext - text for the x-axis
   @param ytext - text for the y-axis
   @param xvalues - values for the x-axis

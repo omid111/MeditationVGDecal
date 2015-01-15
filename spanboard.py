@@ -52,8 +52,8 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.1"
-__status__ = "Rough Draft"
+__version__ = "2.0"
+__status__ = "Almost Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 ISI_TIME = 1.000

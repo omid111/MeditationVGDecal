@@ -215,7 +215,7 @@ def main(argv):
       core.wait(IN_BETWEEN_TRIALS_TIME)
     mathTimes = [mathTrials[i][1] for i in range(len(mathTrials))]
     mathTime = sum(mathTimes)/len(mathTimes) + 2.5*numpy.std(mathTimes)
-    mathPercentRight = (100.0 * sum([1 if mathTrials[i][0]==True else 0 for i in range(len(mathTrials))]))/len(mathTrials)
+    mathPercentRight = (100.0 * sum([1 if mathTrials[i][0]=="True" else 0 for i in range(len(mathTrials))]))/len(mathTrials)
     if(mathPercentRight >= 85):
       break
     instructions = visual.TextStim(win, text="You did not answer > 85% of the math questions correctly. Please try your best. Try again. \n\nClick to continue")
@@ -251,7 +251,7 @@ def main(argv):
         core.wait(IN_BETWEEN_LETTERS_TIME)
         mathQuestions.append(mathQuestion(win,mouse,mathTime))
         log(str(mathQuestions[-1]))
-      mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0]==True else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
+      mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0]=="True" else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
       temp = validateSequence(win,mouse,mathPercentRight)
       correctSeq = [LETTERS[i] for i in x[:ss]]
       results_overall[ss].append((1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss),mathPercentRight))
@@ -484,25 +484,25 @@ def mathQuestion(win,mouse,timelimit):
       while 1 in mouse.getPressed(): # wait until mouse is released
         pass
       if correct:
-        tempLog = "(True,"
+        tempLog = "True"
         winsound.play()
       else:
-        tempLog = "(Accuracy Error,"
+        tempLog = "Accuracy Error"
         losesound.play()
       win.flip()
-      return (correct,time)
+      return (tempLog,time)
     elif(mouse.isPressedIn(falseButton)):
       while 1 in mouse.getPressed():
         pass
       if correct:
-        tempLog = "(Accuracy Error,"
+        tempLog = "Accuracy Error"
         losesound.play()
       else:
-        tempLog = "(True,"
+        tempLog = "True"
         winsound.play()
       win.flip()
       core.wait(TONE_LENGTH)
-      return (not correct,time)
+      return (tempLog,time)
     if(event.getKeys(keyList=['q','escape'])):
       quit()
 
