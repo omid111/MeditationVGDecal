@@ -45,8 +45,8 @@ Log files:
     * "TIMESTAMP: ([true/false],[correct response],[subject response],
       [accuracy],N,%f)" - indicates that a sequence of N letters have been 
       completed in %f time, incorrectly if false, and correctly if true.
-    * "TIMESTAMP: Max Digit-Span BLOCK X: Y" - maximum O-Span for block X is Y 
-      letters.
+    * "TIMESTAMP: Max Digit-Span BLOCK X: Y" - maximum Digit - Span for block 
+      X is Y digits.
     * "TIMESTAMP: END SUCCESS" - test has successfully completed
     * "TIMESTAMP: ERROR! QUIT OUT OF SYSTEM" - test has been quit by user, by
       pressing the 'q' or 'Esc' keys.
@@ -93,7 +93,7 @@ def main(argv):
   #do only if we werent given initials from the command line
   if len(argv) == 1:
     while True:
-      dlg = gui.DlgFromDict(dictionary={'Initials':'','Test Number':'1'},title="O-SPAN Task")
+      dlg = gui.DlgFromDict(dictionary={'Initials':'','Test Number':'1'},title="Digit-Span Task")
       if(dlg.OK):
         initials = dlg.data[0]
         testNo = int(dlg.data[1])
@@ -211,7 +211,7 @@ def main(argv):
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
-        visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxForSpan[-1])).draw()
+        visual.TextStim(win,text="This block is over. Your max forward Digit-Span was {0}".format(maxForSpan[-1])).draw()
         win.flip()
         log("Max Forward Digit Span BLOCK "+str(block)+": " + str(maxForSpan[-1]))
         core.wait(5)

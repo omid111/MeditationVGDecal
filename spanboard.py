@@ -305,7 +305,7 @@ def generateTemplates(win):
   horizRange = (-10,10)
   vertRange = (-5,5)
   timer = core.Clock()
-  bigN = (NUM_PRACTICE_TRIALS*PRACTICE_TRIAL_LENGTH)+(NUM_TRIAL_BLOCKS*(SET_SIZES[1]-SET_SIZES[0]))
+  bigN = (NUM_PRACTICE_TRIALS*PRACTICE_TRIAL_LENGTH)+(NUM_TRIAL_BLOCKS*SET_SIZES[1])
   percent = visual.TextStim(win,text="0%")
   percent.setAutoDraw(True)
   for i in range(bigN):

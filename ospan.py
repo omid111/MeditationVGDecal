@@ -266,7 +266,7 @@ def main(argv):
         tempLog = "(False,"
         losesound.play()
         numWrong += 1
-      log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
+      log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(len(correctSeq))+","+str(temp[1])+")")
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()

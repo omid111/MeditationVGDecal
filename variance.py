@@ -21,10 +21,12 @@ def main():
     identitydata = dict()
     positiondata = dict()
     accuracydata = dict()
+    reduceddata = dict()
     for fn in glob.glob("data/*/"+span+"?.txt"):
       initials = fn.split("/")[1]
       if ospan:
         mathdata[initials] = []
+        reduceddata[initials] = []
       data[initials] = []
       identitydata[initials] = []
       positiondata[initials] = []
@@ -32,6 +34,8 @@ def main():
       with open(fn, 'r') as f:
         if ospan:
           mathlist = []
+          tempmathlist = []
+          tempospans = [0,]
         identitylist = []
         positionlist = []
         accuracylist = []
@@ -40,15 +44,19 @@ def main():
           if "(" in temp:
             temp = temp.split("(")[1][:-2]
             if ospan and len(temp.split(",")) == 2:
-              if temp.split(",")[0] == "True":
+              if temp.replace("'","").split(",")[0] == "True":
                 mathlist.append(1)
+                tempmathlist.append(1)
               else:
                 mathlist.append(0)
+                tempmathlist.append(0)
             else:
               regex = ",["
               if regex not in temp:
                 regex = ", ["
               for t in temp.split(regex)[3].split("],")[0].replace(" ","").replace("'","").split(","):
+                if t =="":
+                  continue
                 if t[0] == 'T':
                   positionlist.append(1)
                   accuracylist.append(1)
@@ -61,8 +69,24 @@ def main():
                 else:
                   identitylist.append(0)
                   accuracylist.append(0)
+              if ospan:
+                if len(tempmathlist) > 0:
+                  tempmathscore = (100.0*sum(tempmathlist))/len(tempmathlist)
+                  a = len(tempmathlist)
+                else:
+                  tempmathscore = 0
+                tempmathlist = []
+                if tempmathscore >= 85:
+                  if temp[:temp.index(",")].replace("'","") == "True":
+                    j = temp.rindex(",")
+                    tempospans.append(a)
+          else:
+            if ospan:
+              tempmathlist = []
           if "Max " in temp or temp=="":
             if ospan and len(mathlist) > 0:
+              reduceddata[initials].append(max(tempospans))
+              tempospans = []
               mathdata[initials].append((100.0*sum(mathlist))/len(mathlist))
             if temp != "":
               data[initials].append(int(temp.split(":")[2]))
@@ -163,6 +187,8 @@ def main():
     else:
       plot("Max "+span.upper(),"Performance",data,10,span)
       if ospan:
+        if len(reduceddata) > 0:
+          plot("Accurate Math Max OSPAN","Performance",reduceddata,10,span)
         plot("Math Performance","Performance(%)",mathdata,100,span)
       plot("Identity Accuracy","Performance(%)",identitydata,100,span)
       plot("Position Accuracy","Performance(%)",positiondata,100,span)
@@ -181,9 +207,16 @@ def plot(title, ylabel,data,toprange,span):
   fig = plt.figure()
   ax = fig.add_subplot(111)
   x = [1,2,3]
+  nodata = True
   for key in data.keys():
     if len(data[key]) > 0:
+      nodata = False
       ax.plot(x[:len(data[key])],data[key],marker='o',label=key)
+  if nodata:
+    print data
+    print "none"
+    plt.close()
+    return
   plt.xlabel("Block Number")
   plt.ylabel("Performance")
   plt.xticks(x)
