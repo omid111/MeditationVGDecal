@@ -60,13 +60,12 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "2.0"
-__status__ = "Almost Final"
+__version__ = "3.0"
+__status__ = "Final"
 
 # GLOBAL VARIABLE DECLARATIONS
-ISI_TIME = 1.000
-IN_BETWEEN_DIGITS_TIME = 0.3
-DIGIT_DISPLAY_TIME = 0.8000 # time each number is displayed
+IN_BETWEEN_DIGITS_TIME = 0.5
+DIGIT_DISPLAY_TIME = 0.500 # time each number is displayed
 FORWARD_RANGE = (3,9)
 REVERSE_RANGE = (2,9)
 NUM_TRIAL_BLOCKS = 3
@@ -75,6 +74,7 @@ MAX_FAILS = 3
 CORRECT_FREQ = 440
 INCORRECT_FREQ = 330
 TONE_LENGTH = 0.5
+HIGHLIGHT_COLOR = "DarkOrange"
 # practice trial options
 NUM_PRACTICE_TRIALS = 2
 PRACTICE_TRIAL_LENGTH = 3
@@ -183,6 +183,8 @@ def main(argv):
   maxForSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
     ss = FORWARD_RANGE[0]
+    if len(maxForSpan) > 0:
+      ss = max(maxForSpan[-1] -2,FORWARD_RANGE[0])
     numWrong = 0
     maxForSpan.append(0)
     while True:
@@ -234,6 +236,8 @@ def main(argv):
   maxRevSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
     ss = REVERSE_RANGE[0]
+    if len(maxRevSpan) > 0:
+      ss = max(maxRevSpan[-1]-2,REVERSE_RANGE[0])
     numWrong = 0
     maxRevSpan.append(0)
     while True:
@@ -446,39 +450,29 @@ def validateSequence(win,mouse,reverse=''):
     i += 1
   win.flip()
   timer = core.Clock()
-  currentI = 1
-  numbers = []
-  numbers2 = []
   clicked = []
   while(True):
     for i in range(len(LETTERS)):
-      if(mouse.isPressedIn(letterRects[i]) and int(LETTERS[i]) not in clicked):
-        if LETTERS[i] == "0":
-          tpos = (-1+4*(-1.0+((i+1)%3)),3*(2.5-((i+1)/3)))
-        else:
-          tpos = (-1+4*(-1.0+(i%3)),3*(2.5-(i/3)))
+      if mouse.isPressedIn(letterRects[i]):
         clicked.append(int(LETTERS[i]))
-        numbers.append(visual.TextStim(win,text=currentI,color="DarkMagenta",pos=tpos))
-        numbers[currentI-1].setAutoDraw(True)
-        numbers[currentI-1].draw()
-        currentI += 1
-        numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
-        numbers2[-1].setAutoDraw(True)
-        numbers2[-1].draw()
+        letterBoxes[i].setColor(HIGHLIGHT_COLOR)
+        win.flip()
+        core.wait(0.200)
+        while mouse.isPressedIn(letterRects[i]):
+          pass
+        letterBoxes[i].setColor("White")
         win.flip()
     if mouse.isPressedIn(backButton) and len(clicked) > 0:
-      currentI -= 1
       clicked.remove(clicked[len(clicked)-1])
-      numbers[currentI-1].setAutoDraw(False)
-      numbers2[-1].setAutoDraw(False)
-      numbers.remove(numbers[currentI-1])
-      numbers2.remove(numbers2[-1])
+      backText.setColor(HIGHLIGHT_COLOR)
       win.flip()
-      core.wait(0.2)
+      core.wait(0.200)
+      while mouse.isPressedIn(backButton):
+        pass
+      backText.setColor("White")
+      win.flip()
     if(mouse.isPressedIn(submitButton)):
       #erase display
-      for n in numbers+numbers2:
-        n.setAutoDraw(False)
       submitButton.setAutoDraw(False)
       submitText.setAutoDraw(False)
       backButton.setAutoDraw(False)

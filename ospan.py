@@ -74,13 +74,14 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "2.0"
-__status__ = "Almost Final"
+__version__ = "3.0"
+__status__ = "Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 LETTERS=("F", "H", "J", "K", "L", "N", "P", "Q", "R", "S", "T", "Y")
 IN_BETWEEN_TRIALS_TIME = 0.5
 MATH_QUESTION_CHANCE_CORRECT = 0.5
+FEEDBACK_LENGTH = 2.000
 # letter display options
 LETTER_DISPLAY_TIME = 0.800
 LETTER_SIZE = 12       # for display size
@@ -93,9 +94,10 @@ CORRECT_FREQ = 440
 INCORRECT_FREQ = 330
 TONE_LENGTH = 0.5
 NUM_MATH_PROBLEMS = 15
+LOWEST_NUMBER = 1
 HIGHEST_NUMBER = 9
 # section 3 options
-SET_SIZES = (3,9) # from base number up to but not including top number
+SET_SIZES = (3,11) # from base number up to but not including top number
 NUM_TRIAL_BLOCKS = 3   # number of trials for each set size.
 MAX_FAILS = 3 # maximum number of fails before quitting
 
@@ -184,16 +186,18 @@ def main(argv):
       displayLetter(win,LETTERS[i])
       win.flip()
       core.wait(IN_BETWEEN_LETTERS_TIME)
-    temp = validateSequence(win,mouse,-1)
+    temp = validateSequence(win,mouse)
     win.flip()
     correctSeq = [LETTERS[i] for i in x[:NUM_PRACTICE_TRIAL_LETTERS]]
     if(temp[0]==correctSeq):
+      colo = "Green"
       tempLog = "(True,"
-      winsound.play()
     else:
+      colo = "Red"
       tempLog = "(False,"
-      losesound.play()
-    core.wait(TONE_LENGTH)
+    visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),NUM_PRACTICE_TRIAL_LETTERS),color=colo).draw()
+    win.flip()
+    core.wait(FEEDBACK_LENGTH)
     log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(NUM_PRACTICE_TRIAL_LETTERS)+","+str(temp[1])+")")
   ### SECTION 1 END
 
@@ -252,11 +256,12 @@ def main(argv):
         mathQuestions.append(mathQuestion(win,mouse,mathTime))
         log(str(mathQuestions[-1]))
       mathPercentRight = (100.0 * sum([1 if mathQuestions[i][0]=="True" else 0 for i in range(len(mathQuestions))]))/len(mathQuestions)
-      temp = validateSequence(win,mouse,mathPercentRight)
+      temp = validateSequence(win,mouse)
       correctSeq = [LETTERS[i] for i in x[:ss]]
       results_overall[ss].append((1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss),mathPercentRight))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
+        colo = "Green"
         winsound.play()
         maxOspan[-1] = ss
         if ss < SET_SIZES[1]:
@@ -264,8 +269,16 @@ def main(argv):
         numWrong = 0
       else:
         tempLog = "(False,"
+        colo = "Red"
         losesound.play()
         numWrong += 1
+      mathcolo = "Green" if mathPercentRight >= 85 else "Red"
+      visual.TextStim(win,text=("Math Score: %.0f%%" % (mathPercentRight)),color=mathcolo,pos=(12,9)).draw()
+      visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),ss),color=colo,wrapWidth=30).draw()
+      numerrors = sum([1 if mathQuestions[i][0]!="True" else 0 for i in range(len(mathQuestions))])
+      visual.TextStim(win,text="You made {0} math error{1} for this set of trials.".format(numerrors,"" if numerrors == 1 else "s"),color=mathcolo,pos=(0,-5),wrapWidth=30).draw()
+      win.flip()
+      core.wait(FEEDBACK_LENGTH)
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(len(correctSeq))+","+str(temp[1])+")")
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
@@ -274,8 +287,6 @@ def main(argv):
         log("Max O-SPAN: " + str(maxOspan[-1]))
         core.wait(IN_BETWEEN_TRIALS_TIME)
         break
-      win.flip()
-      core.wait(TONE_LENGTH)
   ### SECTION 3 END
 
   visual.TextStim(win,text="Thank you for your participation.").draw()
@@ -409,15 +420,14 @@ def mathQuestion(win,mouse,timelimit):
 
   Math questions will be in the form:
           (a*b)+/-c=?
-  @keyword a: random integer between 1 and HIGHEST_NUMBER
-  @keyword b: random integer between 1 and HIGHEST_NUMBER
-  @keyword c: random integer between 1 and HIGHEST_NUMBER
+  @keyword a: random integer between LOWEST_NUMBER and HIGHEST_NUMBER
+  @keyword b: random integer between LOWEST_NUMBER and HIGHEST_NUMBER
+  @keyword c: random integer between LOWEST_NUMBER and HIGHEST_NUMBER
 
   Arguments:
   @param win: psychopy Window to be used for display
   @param mouse: psychopy Mouse used in display
   @param timelimit: time limit in seconds for the math question to be displayed
-                    before counting as incorrect.
 
   @return a tuple of format: (true/error response, time to answer)
   """
@@ -426,9 +436,9 @@ def mathQuestion(win,mouse,timelimit):
   winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
   losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   while True: # no same math problem twice in a row.
-    a = random.randint(1,HIGHEST_NUMBER)
-    b = random.randint(1,HIGHEST_NUMBER)
-    c = random.randint(1,HIGHEST_NUMBER)
+    a = random.randint(LOWEST_NUMBER,HIGHEST_NUMBER)
+    b = random.randint(LOWEST_NUMBER,HIGHEST_NUMBER)
+    c = random.randint(LOWEST_NUMBER,HIGHEST_NUMBER)
     if [a,b,c] != lastMathProblem: break
   lastMathProblem = [a,b,c]
   questiontext = "( "+str(a)+" * "+str(b)+" ) "
@@ -438,7 +448,7 @@ def mathQuestion(win,mouse,timelimit):
   else:
     answer = a*b-c
     questiontext += "- "+str(c) + " = ?"
-  instructions = visual.TextStim(win,text="Click anywhere to Continue.",pos=(0,-3))
+  instructions = visual.TextStim(win,text="When you have solved the math problem, click the mouse to continue.",pos=(0,-3),wrapWidth=30)
   question = visual.TextStim(win,text=questiontext,pos=(0,2))
   instructions.draw()
   question.draw()
@@ -513,40 +523,39 @@ def mathQuestion(win,mouse,timelimit):
       quit()
 
 
-def validateSequence(win, mouse,mathpercentage):
+def validateSequence(win, mouse):
   """Display a screen where users pick letters in the order they remember.
   
   Arguments:
   @param win: psychopy Window to be used for display
   @param mouse: psychopy Mouse used in display
-  @param mathpercentage: percentage to be displayed in the upper right hand
-    corner
   
   @return a tuple of the form: ([list of letters], time taken)
   """
-  instructions = visual.TextStim(win,text="Select the letters in the order they appeared.", pos=(0,10),wrapWidth=80)
+  instructions = visual.TextStim(win,text="Select the letters in the order presented. Use the blank button to fill in forgotten letters.", pos=(0,10),wrapWidth=40)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-5))
   backButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
+  blankText = visual.TextStim(win,text="Blank",pos=(0,-3))
+  blankButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
+  blankButton.setPos((0,-3))
   backButton.setPos((-5,-5))
-  perc = None
-  if mathpercentage != -1:
-    colo = "Green" if mathpercentage >= 85 else "Red"
-    perc = visual.TextStim(win,text=("Math Score: %.0f%%" % (mathpercentage)),color=colo,pos=(12,-9))
-    perc.draw()
-    perc.setAutoDraw(True)
   submitButton.setPos((5,-5))
   submitButton.setAutoDraw(True)
   submitText.setAutoDraw(True)
   backButton.setAutoDraw(True)
   backText.setAutoDraw(True)
+  blankButton.setAutoDraw(True)
+  blankText.setAutoDraw(True)
   instructions.setAutoDraw(True)
   instructions.draw()
   submitButton.draw()
   submitText.draw()
   backButton.draw()
   backText.draw()
+  blankButton.draw()
+  blankText.draw()
   letterRects = []
   letterBoxes = []
   i = 0
@@ -562,6 +571,7 @@ def validateSequence(win, mouse,mathpercentage):
   win.flip()
   timer = core.Clock()
   currentI=1
+  blankI=0
   numbers = []
   numbers2 = []
   clicked = []
@@ -577,8 +587,22 @@ def validateSequence(win, mouse,mathpercentage):
         numbers2[-1].setAutoDraw(True)
         numbers2[-1].draw()
         win.flip()
+    if(mouse.isPressedIn(blankButton) and len(clicked) <= SET_SIZES[1]):
+      clicked.append(-1)
+      numbers.append(visual.TextStim(win,text=currentI,color="DarkMagenta",pos=(2+blankI,-3)))
+      numbers[currentI-1].setAutoDraw(True)
+      numbers[currentI-1].draw()
+      currentI += 1
+      blankI += 1
+      numbers2.append(visual.TextStim(win,text="-",color="DarkMagenta",pos=(-10+2*len(numbers),-10)))
+      numbers2[-1].setAutoDraw(True)
+      numbers2[-1].draw()
+      win.flip()
+      core.wait(0.2)
     if(mouse.isPressedIn(backButton) and currentI > 1):
       currentI -= 1
+      if clicked[-1] == -1:
+        blankI -= 1
       clicked.remove(clicked[len(clicked)-1])
       numbers[currentI-1].setAutoDraw(False)
       numbers2[-1].setAutoDraw(False)
@@ -594,13 +618,13 @@ def validateSequence(win, mouse,mathpercentage):
       submitText.setAutoDraw(False)
       backButton.setAutoDraw(False)
       backText.setAutoDraw(False)
+      blankButton.setAutoDraw(False)
+      blankText.setAutoDraw(False)
       instructions.setAutoDraw(False)
-      if perc:
-        perc.setAutoDraw(False)
       for i in range(len(LETTERS)):
         letterRects[i].setAutoDraw(False)
         letterBoxes[i].setAutoDraw(False)
-      return ([LETTERS[i] for i in clicked],timer.getTime())
+      return ([LETTERS[i] if i != -1 else "-" for i in clicked],timer.getTime())
     if(event.getKeys(keyList=['q','escape'])):
       quit()
 

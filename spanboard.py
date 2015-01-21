@@ -52,13 +52,13 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "2.0"
-__status__ = "Almost Final"
+__version__ = "3.0"
+__status__ = "Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 ISI_TIME = 1.000
 HIGHLIGHT_TIME = 0.8000 # time each square is highlighted during presentation
-SET_SIZES = (1,11)  # from base number to top SS numbers
+SET_SIZES = (3,11)  # from base number to top SS numbers
 NUM_TRIAL_BLOCKS = 3
 NUM_SQUARES = 12
 SQUARE_SIZE = 2.5 # dimension for one side
@@ -173,6 +173,8 @@ def main(argv):
   maxSpanBoard = []
   for i in range(NUM_TRIAL_BLOCKS):
     ss = SET_SIZES[0]
+    if len(maxSpanBoard) > 0:
+      ss = max(maxSpanBoard[-1]-2,SET_SIZES[0])
     numWrong = 0
     maxSpanBoard.append(0)
     while True:
@@ -380,7 +382,7 @@ def beginSequenceandProbe(win, mouse, n):
   #begin asking for the subject to recall pattern
   for square in squares:
     square.setAutoDraw(True)
-  instructions = visual.TextStim(win,text="Select the squares in the order they appeared.", pos=(0,10),wrapWidth=80)
+  instructions = visual.TextStim(win,text="Select the squares in the order they appeared. If you accidently click a square, click Back.", pos=(0,10),wrapWidth=40)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-8))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-8))
@@ -400,29 +402,29 @@ def beginSequenceandProbe(win, mouse, n):
   win.flip()
   #done rendering, time to start timer for subject response
   timer = core.Clock()
-  currentI=1
-  numbers = []
   clicked = []
   while(True):
     for i in range(len(squares)):
-      if(mouse.isPressedIn(squares[i]) and i not in clicked):
+      if mouse.isPressedIn(squares[i]):
         clicked.append(i)
-        numbers.append(visual.TextStim(win,text=currentI,pos=(squares[i].pos)))
-        numbers[currentI-1].setAutoDraw(True)
-        numbers[currentI-1].draw()
-        currentI += 1
+        squares[i].setFillColor(SQUARE_HIGHLIGHT_COLOR)
         win.flip()
-    if(mouse.isPressedIn(backButton) and currentI > 1):
-      currentI -= 1
+        core.wait(0.200)
+        while mouse.isPressedIn(squares[i]):
+          pass
+        squares[i].setFillColor(SQUARE_COLOR)
+        win.flip()
+    if(mouse.isPressedIn(backButton) and len(clicked) > 0):
       clicked.remove(clicked[len(clicked)-1])
-      numbers[currentI-1].setAutoDraw(False)
-      numbers.remove(numbers[currentI-1])
+      backText.setColor(SQUARE_HIGHLIGHT_COLOR)
       win.flip()
-      core.wait(0.2)
+      core.wait(0.200)
+      while mouse.isPressedIn(backButton):
+        pass
+      backText.setColor("White")
+      win.flip()
     if(mouse.isPressedIn(submitButton)):
       #erase display
-      for number in numbers:
-        number.setAutoDraw(False)
       submitButton.setAutoDraw(False)
       submitText.setAutoDraw(False)
       backButton.setAutoDraw(False)
