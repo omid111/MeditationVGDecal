@@ -274,36 +274,39 @@ def main(argv):
   core.wait(5)
 
   # write results to a xls file with all other subjects
-  avgcorrectrt = 0
-  if len(correctrt) > 0:
-    avgcorrectrt = (1.0*sum(correctrt))/len(correctrt)
-  avgincorrectrt = 0
-  if len(incorrectrt) > 0:
-    avgincorrectrt = (1.0*sum(incorrectrt))/len(incorrectrt)
-  import xlrd,xlwt,xlutils.copy
-  excelfile = "data/sart.xls"
-  if not os.path.isfile(excelfile):
-    w = xlwt.Workbook()
-    ws = w.add_sheet("Data")
-    style = xlwt.easyxf("font: bold on")
-    ws.write(0,0,"Initials",style)
-    ws.write(0,1,"Day",style)
-    ws.write(0,2,"Accuracy",style)
-    ws.write(0,3,"Target Accuracy",style)
-    ws.write(0,4,"Avg RT when incorrect",style)
-    ws.write(0,5,"Avg RT when correct",style)
-    w.save(excelfile)
-  oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
-  row = oldfile.sheet_by_index(0).nrows
-  newfile = xlutils.copy.copy(oldfile)
-  sheet = newfile.get_sheet(0)
-  sheet.write(row,0,initials)
-  sheet.write(row,1,testNo)
-  sheet.write(row,2,accuracy)
-  sheet.write(row,3,targetaccuracy)
-  sheet.write(row,4,avgincorrectrt)
-  sheet.write(row,5,avgcorrectrt)
-  newfile.save(excelfile)
+  try:
+    avgcorrectrt = 0
+    if len(correctrt) > 0:
+      avgcorrectrt = (1.0*sum(correctrt))/len(correctrt)
+    avgincorrectrt = 0
+    if len(incorrectrt) > 0:
+      avgincorrectrt = (1.0*sum(incorrectrt))/len(incorrectrt)
+    import xlrd,xlwt,xlutils.copy
+    excelfile = "data/sart.xls"
+    if not os.path.isfile(excelfile):
+      w = xlwt.Workbook()
+      ws = w.add_sheet("Data")
+      style = xlwt.easyxf("font: bold on")
+      ws.write(0,0,"Initials",style)
+      ws.write(0,1,"Day",style)
+      ws.write(0,2,"Accuracy",style)
+      ws.write(0,3,"Target Accuracy",style)
+      ws.write(0,4,"Avg RT when incorrect",style)
+      ws.write(0,5,"Avg RT when correct",style)
+      w.save(excelfile)
+    oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
+    row = oldfile.sheet_by_index(0).nrows
+    newfile = xlutils.copy.copy(oldfile)
+    sheet = newfile.get_sheet(0)
+    sheet.write(row,0,initials)
+    sheet.write(row,1,testNo)
+    sheet.write(row,2,accuracy)
+    sheet.write(row,3,targetaccuracy)
+    sheet.write(row,4,avgincorrectrt)
+    sheet.write(row,5,avgcorrectrt)
+    newfile.save(excelfile)
+  except ImportError:
+    print "ERROR: NO XLRD,XLWT, or XLUTILS installed."
 
   log("END SUCCESS")
   logFile.close()

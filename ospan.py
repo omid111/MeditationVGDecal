@@ -292,26 +292,29 @@ def main(argv):
   core.wait(8)
 
   # write results to a xls file with all other subjects
-  import xlrd,xlwt,xlutils.copy
-  excelfile = "data/ospan.xls"
-  if not os.path.isfile(excelfile):
-    w = xlwt.Workbook()
-    ws = w.add_sheet("Data")
-    style = xlwt.easyxf("font: bold on")
-    ws.write(0,0,"Initials",style)
-    ws.write(0,1,"Day",style)
-    ws.write(0,2,"Avg Max O-SPAN",style)
-    ws.write(0,3,"Avg Math Score",style)
-    w.save(excelfile)
-  oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
-  row = oldfile.sheet_by_index(0).nrows
-  newfile = xlutils.copy.copy(oldfile)
-  sheet = newfile.get_sheet(0)
-  sheet.write(row,0,initials)
-  sheet.write(row,1,testNo)
-  sheet.write(row,2,(1.0*sum(maxOspan))/len(maxOspan))
-  sheet.write(row,3,(1.0*sum(mathscores))/len(mathscores))
-  newfile.save(excelfile)
+  try:
+    import xlrd,xlwt,xlutils.copy
+    excelfile = "data/ospan.xls"
+    if not os.path.isfile(excelfile):
+      w = xlwt.Workbook()
+      ws = w.add_sheet("Data")
+      style = xlwt.easyxf("font: bold on")
+      ws.write(0,0,"Initials",style)
+      ws.write(0,1,"Day",style)
+      ws.write(0,2,"Avg Max O-SPAN",style)
+      ws.write(0,3,"Avg Math Score",style)
+      w.save(excelfile)
+    oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
+    row = oldfile.sheet_by_index(0).nrows
+    newfile = xlutils.copy.copy(oldfile)
+    sheet = newfile.get_sheet(0)
+    sheet.write(row,0,initials)
+    sheet.write(row,1,testNo)
+    sheet.write(row,2,(1.0*sum(maxOspan))/len(maxOspan))
+    sheet.write(row,3,(1.0*sum(mathscores))/len(mathscores))
+    newfile.save(excelfile)
+  except ImportError:
+    print "ERROR: NO XLRD,XLWT, or XLUTILS installed."
 
   log("END SUCCESS")
   logFile.close()
@@ -346,18 +349,21 @@ def makeresultsplot(name, xtext, ytext, xvalues, yvalues, yvalues2):
 
   @return path to the image where the graph is saved
   """
-  import matplotlib.pyplot as plt
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  ax.plot(xvalues,yvalues,marker='o',label="O-SPAN")
-  ax.plot(xvalues,yvalues2,marker='o',label="Math")
-  plt.xlabel(xtext)
-  plt.ylabel(ytext)
-  plt.legend()
-  plt.axis([SET_SIZES[0],SET_SIZES[1],0,101])
-  plt.title("Graph of performance")
-  plt.savefig(dataPath+str(name)+".png")
-  return dataPath+str(name)+".png"
+  try:
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(xvalues,yvalues,marker='o',label="O-SPAN")
+    ax.plot(xvalues,yvalues2,marker='o',label="Math")
+    plt.xlabel(xtext)
+    plt.ylabel(ytext)
+    plt.legend()
+    plt.axis([SET_SIZES[0],SET_SIZES[1],0,101])
+    plt.title("Graph of performance")
+    plt.savefig(dataPath+str(name)+".png")
+    return dataPath+str(name)+".png"
+  except ImportError:
+    print "ERROR: NO MATPLOTLIB.PYPLOT installed."
 
 def correctness(sequence, correct):
   """Compares @param sequence to @param correct sequence for correctness.

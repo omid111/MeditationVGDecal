@@ -285,26 +285,29 @@ def main(argv):
   core.wait(8)
 
   # write results to a xls file with all other subjects
-  import xlrd,xlwt,xlutils.copy
-  excelfile = "data/digitspan.xls"
-  if not os.path.isfile(excelfile):
-    w = xlwt.Workbook()
-    ws = w.add_sheet("Data")
-    style = xlwt.easyxf("font: bold on")
-    ws.write(0,0,"Initials",style)
-    ws.write(0,1,"Day",style)
-    ws.write(0,2,"Avg Forward Digit-SPAN",style)
-    ws.write(0,3,"Avg Reverse Digit-SPAN",style)
-    w.save(excelfile)
-  oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
-  row = oldfile.sheet_by_index(0).nrows
-  newfile = xlutils.copy.copy(oldfile)
-  sheet = newfile.get_sheet(0)
-  sheet.write(row,0,initials)
-  sheet.write(row,1,testNo)
-  sheet.write(row,2,(1.0*sum(maxForSpan))/len(maxForSpan))
-  sheet.write(row,3,(1.0*sum(maxRevSpan))/len(maxRevSpan))
-  newfile.save(excelfile)
+  try:
+    import xlrd,xlwt,xlutils.copy
+    excelfile = "data/digitspan.xls"
+    if not os.path.isfile(excelfile):
+      w = xlwt.Workbook()
+      ws = w.add_sheet("Data")
+      style = xlwt.easyxf("font: bold on")
+      ws.write(0,0,"Initials",style)
+      ws.write(0,1,"Day",style)
+      ws.write(0,2,"Avg Forward Digit-SPAN",style)
+      ws.write(0,3,"Avg Reverse Digit-SPAN",style)
+      w.save(excelfile)
+    oldfile = xlrd.open_workbook(excelfile,formatting_info=True)
+    row = oldfile.sheet_by_index(0).nrows
+    newfile = xlutils.copy.copy(oldfile)
+    sheet = newfile.get_sheet(0)
+    sheet.write(row,0,initials)
+    sheet.write(row,1,testNo)
+    sheet.write(row,2,(1.0*sum(maxForSpan))/len(maxForSpan))
+    sheet.write(row,3,(1.0*sum(maxRevSpan))/len(maxRevSpan))
+    newfile.save(excelfile)
+  except ImportError:
+    print "ERROR: NO XLRD,XLWT, or XLUTILS installed."
 
   log("END SUCCESS")
   logFile.close()
@@ -360,18 +363,21 @@ def makeresultsplot(name, xtext, ytext, xvalues, xvalues2, yvalues, yvalues2):
 
   @return path to the image where the graph is saved
   """
-  import matplotlib.pyplot as plt
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  ax.plot(xvalues,yvalues,marker='o',label="Forward Digit Span")
-  ax.plot(xvalues2,yvalues2,marker='o',label="Reverse Digit Span")
-  plt.xlabel(xtext)
-  plt.ylabel(ytext)
-  plt.legend()
-  plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,101])
-  plt.title("Graph of performance")
-  plt.savefig(dataPath+str(name)+".png")
-  return dataPath+str(name)+".png"
+  try:
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(xvalues,yvalues,marker='o',label="Forward Digit Span")
+    ax.plot(xvalues2,yvalues2,marker='o',label="Reverse Digit Span")
+    plt.xlabel(xtext)
+    plt.ylabel(ytext)
+    plt.legend()
+    plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,101])
+    plt.title("Graph of performance")
+    plt.savefig(dataPath+str(name)+".png")
+    return dataPath+str(name)+".png"
+  except ImportError:
+    print "ERROR: NO MATPLOTLIB.PYPLOT installed."
 
 def correctness(sequence, correct):
   """Compares @param sequence to @param correct sequence for correctness.

@@ -165,7 +165,7 @@ def main():
           splice = 3
           if len(i1[key]) == 2:
             splice = 1
-          i1[key] = i1[key][splice:]
+          i1[key] = i1[key][:splice]
         else:
           del i1[key]
       for key in i2.keys():
