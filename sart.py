@@ -14,7 +14,7 @@ psychopy gui, you can provide them as command line arguments when running
 with the terminal.
 
 Log files:
-  All log files are placed in the directory data/X/digitspan.txt, where X is 
+  All log files are placed in the directory data/X/sart.txt, where X is 
   the initials of the participant. Each line of the log file describes 
   different actions occuring in the program. Here are the different possible 
   formats of each line in the log file:
@@ -51,8 +51,8 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.0"
-__status__ = "Rough Draft"
+__version__ = "1.1"
+__status__ = "Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 DIGIT_DISPLAY_TIME = 0.250 # time each number is displayed
@@ -197,7 +197,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Sustained Attention Practice\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Sustained Attention\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
