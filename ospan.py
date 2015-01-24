@@ -274,7 +274,7 @@ def main(argv):
         numWrong += 1
       mathcolo = "Green" if mathPercentRight >= 85 else "Red"
       visual.TextStim(win,text=("Math Score: %.0f%%" % (mathPercentRight)),color=mathcolo,pos=(12,9)).draw()
-      visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),ss),color=colo,wrapWidth=30).draw()
+      visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),len(correctSeq)),color=colo,wrapWidth=30).draw()
       numerrors = sum([1 if mathQuestions[i][0]!="True" else 0 for i in range(len(mathQuestions))])
       visual.TextStim(win,text="You made {0} math error{1} for this set of trials.".format(numerrors,"" if numerrors == 1 else "s"),color=mathcolo,pos=(0,-5),wrapWidth=30).draw()
       win.flip()
@@ -296,8 +296,8 @@ def main(argv):
   oscores = []
   mathscores = []
   for key in results_overall.keys():
-    oscores.append((100.0*sum([i[0] for i in results_overall[key]]))/NUM_TRIAL_BLOCKS)
-    mathscores.append((1.0*sum([i[1] for i in results_overall[key]]))/NUM_TRIAL_BLOCKS)
+    oscores.append((100.0*sum([i[0] for i in results_overall[key]]))/len(results_overall))
+    mathscores.append((1.0*sum([i[1] for i in results_overall[key]]))/len(results_overall))
   visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_overall.keys(),oscores,mathscores)).draw()
   win.flip()
   core.wait(8)

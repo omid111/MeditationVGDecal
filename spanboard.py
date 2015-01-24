@@ -209,7 +209,7 @@ def main(argv):
 
   spanscores = []
   for key in results_overall.keys():
-    spanscores.append((100.0*sum(results_overall[key]))/NUM_TRIAL_BLOCKS)
+    spanscores.append((100.0*sum(results_overall[key]))/len(results_overall[key]))
   visual.SimpleImageStim(win, image=makeresultsplot(testNo,"Set Size","Percentage Correct(%)",results_overall.keys(),spanscores)).draw()
   win.flip()
   core.wait(8)
