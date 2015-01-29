@@ -10,8 +10,8 @@ Response-Competition Paradigm - Below are the different sections of the task:
     perceptual load of the experiment. In the beginning, this is repeated 
     NUM_PRACTICE_TRIALS times for NUM_PRACTICE_BLOCKS times. Then, this is 
     repeated NUM_TRIALS_PER_BLOCK times per block for NUM_BLOCK times.
-  3. Actual Round: The same TARGET_DIGIT will be used, but this time there will
-    be NUM_DIGIT_SETS of digits in DIGIT_RANGE presented to the subject. 
+  2. Go - NoGo Task
+  3. Work Memory High Load task
 
 Command-Line Execution: Instead of entering the subject initials through the
 psychopy gui, you can provide them as command line arguments when running 
@@ -149,7 +149,7 @@ def main(argv):
 
   ###SECTION 1 PRACTICE BEGIN
   log("Section 1 Practice")
-  instructions = visual.TextStim(win,text="Response-Competition Task Practice\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Part 1 Practice\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be either a larger Z, X, or P on the side of the screen, try to ignore it as you respond.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -215,7 +215,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Response-Competition Task\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Remember, on the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. Try to ignore the Z, X, or P that appears on the sides.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -294,9 +294,9 @@ def main(argv):
   #begin drawing
   for block in range(1,NUM_BLOCKS2+1):
     if condition_s2:
-      instructions = visual.TextStim(win,text="Response-Competition Task Part 2\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red object. If the object is blue, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is red, then don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red object. If the object is blue, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is red however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
-      instructions = visual.TextStim(win,text="Response-Competition Task Part 2\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red shape. If the object is blue square or a red circle, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is a red square or a blue circle, then don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red shape. If the object is blue square or a red circle, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is a red square or a blue circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor="Blue",pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor="Red",pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor="Red",pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -400,7 +400,7 @@ def main(argv):
 
   ###SECTION 3 BEGIN
   log("Section 3")
-  instructions = visual.TextStim(win,text="Response-Competition Task Part 3\n\nOn the screen, you will see a either 1 number or 6 numbers followed by a letter. Similar to before, if you see an x you type 2, or if you see a z type 0. Afterwards, a digit is presented on screen. If you have seen the digit before the letters, press 2 otherwise press 0. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Last Part\n\nThis time you will be doing 2 memory related tasks. \n1. On the screen, you will see a either a 1 number or 6 numbers.\n2. Then you will see a letter. Similar to before, if you see an x you type 2, or if you see a z type 0. Do this part quickly because you only have 3 seconds.\n3.Afterwards, a digit is presented on screen. If you have seen the digit before the letter, press 2(True) otherwise press 0(False). \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()

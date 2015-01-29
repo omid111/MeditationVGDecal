@@ -162,7 +162,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Operational Span Practice\n\nYou will be shown a series of letters. Try to remember the letters in the order they are presented to you. You'll then be asked to reproduce the series at the end of the trial.\n\nClick to Continue")
+  instructions = visual.TextStim(win,text="Practice\n\nOn the screen, you will see a series of letters. You'll then be asked to reproduce the series at the end of the trial. Feel free to use any method such as acronyms, however do not say the letters out loud. \n\nClick to Continue")
   instructions.draw()
   win.flip()
   # wait until mouse is pressed
@@ -203,7 +203,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win, text="You will now be asked to perform a series of simple math problems. The math problem will be something like:\n(10*2) + 2 = ? When you think you know the answer to the math problem, click to go to the next page. You'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. If the problem is correct, respond True; if the answer is incorrect, respond False. Go at a steady and quick pace but try not to get any wrong.\n\n Click to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="You will now perform some simple math problems. The math problem will be something like:\n(10*2) + 2 = ? When you click, you'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. Go at a steady and quick pace but try not to get more than 15% wrong.\n\n Click to continue.",wrapWidth=30)
   while True:
     instructions.draw()
     win.flip()
@@ -222,12 +222,12 @@ def main(argv):
     mathPercentRight = (100.0 * sum([1 if mathTrials[i][0]=="True" else 0 for i in range(len(mathTrials))]))/len(mathTrials)
     if(mathPercentRight >= 85):
       break
-    instructions = visual.TextStim(win, text="You did not answer > 85% of the math questions correctly. Please try your best. Try again. \n\nClick to continue")
+    instructions = visual.TextStim(win, text="You did not answer more than 85% of the math questions correctly. Please try your best. Try again. \n\nClick to continue")
   ### SECTION 2 END
 
   ### SECTION 3 BEGIN
   log("Section 3")
-  instructions = visual.TextStim(win, text="You will now be shown letters and math problems alternating. At some point, you will be asked to recall all the letters from the series, indicating the order in which the letters were presented.\n\nAny mistake (recalling too many items, too few items, or items in the wrong order) counts as a mistake. Your operation span score is valid only if you are at least 85% accurate in evaluating the math problems, so try to answer all of those problems correctly while trying also to remember the order of the letters.\n\nThis task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best. \n\nClick to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="We will now combine the last two tasks. Letters and Math problems will alternate. You will then be asked to recall all the letters from the series, indicating the order in which the letters were presented.\n\nYour score is valid only if you are at least 85% accurate in evaluating the math problems, so try to answer all of those problems correctly while trying also to remember the order of the letters.\n\nThis task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best. Remember to use any strategy to remember the letters, but do not say them out loud. \n\nClick to continue.",wrapWidth=30)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():

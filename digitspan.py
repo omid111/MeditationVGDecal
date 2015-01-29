@@ -5,7 +5,7 @@ test is comprised of two phases.
   1. NUM_PRACTICE_TRIALS of practice rounds, each with audio number 
     presentation of length PRACTICE_TRIAL_LENGTH.
   3. Actual rounds, beginning with a sequence of lengths within the ranges 
-    REVERSE_RANGE and continuing until the sequences of length SET_SIZE_MAX or 
+    FORWARD_RANGE and continuing until the sequences of length SET_SIZE_MAX or 
     the subject fails three rounds in a set size. This will be repeated 
     NUM_TRIAL_BLOCKS times.
   3. Actual rounds, beginning with a sequence of lengths within the ranges 
@@ -139,7 +139,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Digit Span Practice\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click all of the numbers in the sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, click all of the numbers in the sequence in which they occurred.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -177,7 +177,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Digit Span Forward\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click the numbers in the same sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, enter the sequence in the same order you heard it.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -203,7 +203,6 @@ def main(argv):
           else:
             ss2 = lastss + 1
             sscount = 1
-            print "hi"
         else:
           ss2 = lastss
         x = []
@@ -236,7 +235,6 @@ def main(argv):
         losesound.play()
         numWrong += 1
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
-      print lastss,ss,sscount,numWrong
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max forward Digit-Span was {0}".format(maxForSpan[-1])).draw()
@@ -252,7 +250,35 @@ def main(argv):
   ### SECTION 3 BEGIN
   log("Section 3")
   win.flip()
-  instructions = visual.TextStim(win,text="Digit Span Reverse\n\nIn this test you will have to try to remember a sequence of numbers that will appear on the screen one after the other.  When you hear the beep, click all of the numbers in the reverse sequence in which they occurred.  If you correctly remember all of the numbers then the next list of numbers will be one number longer.  If you make a mistake then the next list of numbers will be one number shorter.  After three errors, the test will end.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nClick to Continue",wrapWidth=40)
+  instructions.draw()
+  win.flip()
+  while 1 not in mouse.getPressed():
+    pass
+  while 1 in mouse.getPressed():
+    pass
+  ri = 0
+  for i in range(2):
+    x = rseqs[ri]
+    ri += 1
+    for dig in x:
+      displayDigit(win,dig)
+      win.flip()
+      core.wait(IN_BETWEEN_DIGITS_TIME)
+    temp = validateSequence(win,mouse,reverse=" reverse")
+    correctSeq = x[::-1]
+    if(temp[0]==correctSeq):
+      tempLog = "(True,"
+      winsound.play()
+    else:
+      tempLog = "(False,"
+      losesound.play()
+    log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
+
+  # end practice
+
+  win.flip()
+  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -264,7 +290,6 @@ def main(argv):
   for block in range(NUM_TRIAL_BLOCKS):
     numWrong = 0
     maxRevSpan.append(0)
-    ri = 0
     lastss = 0
     sscount = 1
     while True:
@@ -278,7 +303,6 @@ def main(argv):
           else:
             ss2 = lastss + 1
             sscount = 1
-            print "hi"
         else:
           ss2 = lastss
         x = []
@@ -311,7 +335,6 @@ def main(argv):
         losesound.play()
         numWrong += 1
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
-      print lastss,ss,sscount,numWrong
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max reverse Digit-Span was {0}".format(maxRevSpan[-1])).draw()
