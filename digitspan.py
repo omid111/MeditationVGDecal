@@ -68,9 +68,9 @@ IN_BETWEEN_DIGITS_TIME = 0.5
 DIGIT_DISPLAY_TIME = 0.500 # time each number is displayed
 FORWARD_RANGE = (3,9)
 REVERSE_RANGE = (2,9)
-NUM_TRIAL_BLOCKS = 3
+NUM_TRIAL_BLOCKS = 1 # if you change this please contact programmer
 DIGIT_SIZE = 12 # size of digits on screen display
-MAX_FAILS = 3
+MAX_FAILS = 2 # in a row
 CORRECT_FREQ = 440
 INCORRECT_FREQ = 330
 TONE_LENGTH = 0.5
@@ -84,6 +84,9 @@ programTime = core.Clock()
 # log file location
 logFile = "digitspan"
 dataPath = "digitspan"
+# number sequences
+fseqs = []
+rseqs = []
 # wav sound file array
 soundFiles = []
 def main(argv):
@@ -132,6 +135,7 @@ def main(argv):
   winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
   losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   loadSoundFiles()
+  loadSequences()
 
   ### SECTION 1 BEGIN
   log("Section 1")
@@ -158,6 +162,7 @@ def main(argv):
     for i in x[:PRACTICE_TRIAL_LENGTH]:
       displayDigit(win,i)
       win.flip()
+      core.wait(IN_BETWEEN_DIGITS_TIME)
     temp = validateSequence(win,mouse)
     correctSeq = x[:PRACTICE_TRIAL_LENGTH]
     if(temp[0]==correctSeq):
@@ -182,35 +187,56 @@ def main(argv):
   results_forward = dict()
   maxForSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
-    ss = FORWARD_RANGE[0]
-    if len(maxForSpan) > 0:
-      ss = max(maxForSpan[-1] -2,FORWARD_RANGE[0])
     numWrong = 0
     maxForSpan.append(0)
+    fi = 0
+    lastss = 0
+    sscount = 1
     while True:
+      if fi < len(fseqs):
+        x = fseqs[fi]
+        fi += 1
+      else:
+        if sscount >= 2:
+          if lastss == FORWARD_RANGE[1]:
+            break
+          else:
+            ss2 = lastss + 1
+            sscount = 1
+            print "hi"
+        else:
+          ss2 = lastss
+        x = []
+        while len(x)<ss2:
+          temp = random.randint(0,9)
+          if not x or temp != x[-1]:
+            x.append(temp)
+      ss = len(x)
+      if lastss == ss:
+        sscount += 1
+      else:
+        sscount = 1
+        numWrong = 0
       if ss not in results_forward:
         results_forward[ss] = []
-      x = range(10)
-      random.shuffle(x)
-      for dig in x[:ss]:
+      for dig in x:
         displayDigit(win,dig)
         win.flip()
         core.wait(IN_BETWEEN_DIGITS_TIME)
       temp = validateSequence(win,mouse)
-      correctSeq = x[:ss]
+      correctSeq = x
       results_forward[ss].append(1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
         winsound.play()
         maxForSpan[-1] = ss
-        if ss < FORWARD_RANGE[1]:
-          ss += 1
         numWrong = 0
       else:
         tempLog = "(False,"
         losesound.play()
         numWrong += 1
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
+      print lastss,ss,sscount,numWrong
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max forward Digit-Span was {0}".format(maxForSpan[-1])).draw()
@@ -220,6 +246,7 @@ def main(argv):
         break
       win.flip()
       core.wait(TONE_LENGTH)
+      lastss = ss
   ### SECTION 2 END
 
   ### SECTION 3 BEGIN
@@ -235,35 +262,56 @@ def main(argv):
   results_reverse = dict()
   maxRevSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
-    ss = REVERSE_RANGE[0]
-    if len(maxRevSpan) > 0:
-      ss = max(maxRevSpan[-1]-2,REVERSE_RANGE[0])
     numWrong = 0
     maxRevSpan.append(0)
+    ri = 0
+    lastss = 0
+    sscount = 1
     while True:
+      if ri < len(rseqs):
+        x = rseqs[ri]
+        ri += 1
+      else:
+        if sscount >= 2:
+          if lastss == REVERSE_RANGE[1]:
+            break
+          else:
+            ss2 = lastss + 1
+            sscount = 1
+            print "hi"
+        else:
+          ss2 = lastss
+        x = []
+        while len(x)<ss2:
+          temp = random.randint(0,9)
+          if not x or temp != x[-1]:
+            x.append(temp)
+      ss = len(x)
+      if lastss == ss:
+        sscount += 1
+      else:
+        sscount = 1
+        numWrong = 0
       if ss not in results_reverse:
         results_reverse[ss] = []
-      x = range(10)
-      random.shuffle(x)
-      for dig in x[:ss]:
+      for dig in x:
         displayDigit(win,dig)
         win.flip()
         core.wait(IN_BETWEEN_DIGITS_TIME)
       temp = validateSequence(win,mouse,reverse=" reverse")
-      correctSeq = x[:ss][::-1]
+      correctSeq = x[::-1]
       results_reverse[ss].append(1.0*sum([2 if l=='TT' else 1 if l=='FT' else 0 for l in correctness(temp[0],correctSeq)])/(2.0*ss))
       if(temp[0]==correctSeq):
         tempLog = "(True,"
         winsound.play()
         maxRevSpan[-1] = ss
-        if ss < REVERSE_RANGE[1]:
-          ss += 1
         numWrong = 0
       else:
         tempLog = "(False,"
         losesound.play()
         numWrong += 1
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(ss)+","+str(temp[1])+")")
+      print lastss,ss,sscount,numWrong
       if numWrong >= MAX_FAILS:
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max reverse Digit-Span was {0}".format(maxRevSpan[-1])).draw()
@@ -273,6 +321,7 @@ def main(argv):
         break
       win.flip()
       core.wait(TONE_LENGTH)
+      lastss = ss
   ### SECTION 3 END
   visual.TextStim(win,text="Thank you for your participation.").draw()
   win.flip()
@@ -332,6 +381,42 @@ def loadSoundFiles():
   global soundFiles
   for i in range(10):
     soundFiles.append(sound.SoundPygame(value=str("sounds/female_"+str(i)+".wav")))
+
+def loadSequences():
+  """Loads preset sequences into memory"""
+  global fseqs, rseqs
+  fseqs.append([9,7])
+  fseqs.append([6,3])
+  fseqs.append([5,8,2])
+  fseqs.append([6,9,4])
+  fseqs.append([7,2,8,6])
+  fseqs.append([6,4,3,9])
+  fseqs.append([4,2,7,3,1])
+  fseqs.append([7,5,8,3,6])
+  fseqs.append([3,9,2,4,8,7])
+  fseqs.append([6,1,9,4,7,3])
+  fseqs.append([4,1,7,9,3,8,6])
+  fseqs.append([6,9,1,7,4,2,8])
+  fseqs.append([3,8,2,9,6,1,7,4])
+  fseqs.append([5,8,1,3,2,6,4,7])
+  fseqs.append([2,7,5,8,6,3,1,9,4])
+  fseqs.append([7,1,3,9,4,2,5,6,8])
+  rseqs.append([3,1])
+  rseqs.append([2,4])
+  rseqs.append([4,6])
+  rseqs.append([5,7])
+  rseqs.append([6,2,9])
+  rseqs.append([4,7,5])
+  rseqs.append([8,2,7,9])
+  rseqs.append([4,9,6,8])
+  rseqs.append([6,5,8,4,3])
+  rseqs.append([1,5,4,8,6])
+  rseqs.append([5,3,7,4,1,8])
+  rseqs.append([7,2,4,8,5,6])
+  rseqs.append([8,1,4,9,3,6,2])
+  rseqs.append([4,7,3,9,6,2,8])
+  rseqs.append([9,4,3,7,6,2,1,8])
+  rseqs.append([7,2,8,1,5,6,4,3])
 
 def quit():
   """Quit the program, logging an error and then exiting."""
