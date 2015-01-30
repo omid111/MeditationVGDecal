@@ -522,7 +522,7 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  instructions = visual.TextStim(win,text="Click the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=80)
+  instructions = visual.TextStim(win,text="Click or type the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=80)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-5))
@@ -561,7 +561,7 @@ def validateSequence(win,mouse,reverse=''):
   clicked = []
   while(True):
     for i in range(len(LETTERS)):
-      if mouse.isPressedIn(letterRects[i]):
+      if mouse.isPressedIn(letterRects[i]) or event.getKeys(keyList=['num_'+LETTERS[i],LETTERS[i]]):
         clicked.append(int(LETTERS[i]))
         letterBoxes[i].setColor(HIGHLIGHT_COLOR)
         win.flip()
@@ -579,7 +579,7 @@ def validateSequence(win,mouse,reverse=''):
         pass
       backText.setColor("White")
       win.flip()
-    if(mouse.isPressedIn(submitButton)):
+    if mouse.isPressedIn(submitButton) or event.getKeys(keyList=['num_enter','return']):
       #erase display
       submitButton.setAutoDraw(False)
       submitText.setAutoDraw(False)
