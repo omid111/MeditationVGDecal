@@ -506,7 +506,7 @@ def main(argv):
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+letter.text+";"+str(ans_true)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()))
       core.wait(TONE_LENGTH)
     condition_s3 = not condition_s3
   s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
