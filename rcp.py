@@ -67,17 +67,17 @@ FIXATION_TIME = 1.000
 NUM_PRACTICE_TRIALS = 1   # per block
 NUM_PRACTICE_BLOCKS = 1
 # Experiment 1
-NUM_TRIALS_PER_BLOCK = 1  # 72
+NUM_TRIALS_PER_BLOCK =  72
 NUM_BLOCKS = 2             # 10
 DISPLAY_TIME = 0.050 # time stimuli is displayed
 # Experiment 2
-NUM_TRIALS_PER_BLOCK2 = 1 # 
+NUM_TRIALS_PER_BLOCK2 = 72 
 NUM_BLOCKS2 = 2
 DISPLAY_TIME2 = 0.100 # time stimuli is displayed
 TIMEOUT = 3
 # Experiment 3
-NUM_TRIALS_PER_BLOCK3 = 1 # 
-NUM_BLOCKS3 = 4
+NUM_TRIALS_PER_BLOCK3 = 72 
+NUM_BLOCKS3 = 3
 DISPLAY_TIME3 = 0.050 # time stimuli is displayed
 NUMBER_DISPLAY_TIME = 0.500 # time numbers are displayed
 MASK_TIME = 1.000
