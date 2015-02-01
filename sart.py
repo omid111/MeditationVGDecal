@@ -127,7 +127,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Sustained Attention Practice\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. This practice will be twice as slow as the next round. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Practice\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -264,7 +264,7 @@ def main(argv):
     log(tempLog+str(i)+","+str(reactionTime)+")")
   accuracy = (1.0*correct)/len(digitSet)
   targetaccuracy = (1.0*targetcorrect)/NUM_DIGIT_SETS
-  feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%%" % (accuracy*100.0)) )
+  feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%%" % (targetaccuracy*100.0)) )
   feedback.draw()
   win.flip()
   log("Accuracy: "+str(accuracy))

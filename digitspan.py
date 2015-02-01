@@ -132,20 +132,21 @@ def main(argv):
   log("Test Number: " + str(testNo))
   win = visual.Window([800,600],monitor="testMonitor",units="deg",fullscr=True)
   mouse = event.Mouse(win=win)
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
+  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH-0.1)
+  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH-0.1)
   loadSoundFiles()
   loadSequences()
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, click all of the numbers in the sequence in which they occurred.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, click all of the numbers in the sequence in which they occurred.\n\nPress any key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  #while 1 not in mouse.getPressed():
+  #  pass
+  #while 1 in mouse.getPressed():
+  #  pass
+  event.waitKeys()
   visual.TextStim(win,text="This is the sound of a correct response.").draw()
   win.flip()
   winsound.play()
@@ -177,13 +178,10 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, enter the sequence in the same order you heard it.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, enter the sequence in the same order you heard it.\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  event.waitKeys()
   results_forward = dict()
   maxForSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
@@ -250,13 +248,10 @@ def main(argv):
   ### SECTION 3 BEGIN
   log("Section 3")
   win.flip()
-  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  event.waitKeys()
   ri = 0
   for i in range(2):
     x = rseqs[ri]
@@ -278,13 +273,10 @@ def main(argv):
   # end practice
 
   win.flip()
-  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
-  while 1 not in mouse.getPressed():
-    pass
-  while 1 in mouse.getPressed():
-    pass
+  event.waitKeys()
   results_reverse = dict()
   maxRevSpan = []
   for block in range(NUM_TRIAL_BLOCKS):
@@ -522,7 +514,7 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  instructions = visual.TextStim(win,text="Click or type the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=80)
+  instructions = visual.TextStim(win,text="Click or type the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=30)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-5))

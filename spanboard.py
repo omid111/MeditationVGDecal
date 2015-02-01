@@ -161,7 +161,7 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win, text="In this task, there will be squares in random locations on the screen. Then squares will become highlighted in a random order. Your task is to remember which squares were highlighted and in which order. You'll be asked to recreate the sequence at the end of the trial. The length of the series will increase until you are not able to recall the series correctly. \n\n Click to continue.")
+  instructions = visual.TextStim(win, text="In this task, there will be squares in random locations on the screen. Then squares will become highlighted in a random order. \nYou'll be asked to recreate the sequence at the end of the trial. The length of the series will increase until you are not able to recall the series correctly. \n\n Click to continue.")
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -193,6 +193,9 @@ def main(argv):
         losesound.play()
         numWrong += 1
       if numWrong >= MAX_FAILS:
+        if maxSpanBoard[-1] <= 0 and ss > SET_SIZES[0]:
+          ss -= 1
+          continue
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max Span-Board was {0}".format(maxSpanBoard[-1]) ).draw()
         win.flip()
@@ -375,14 +378,14 @@ def beginSequenceandProbe(win, mouse, n):
     core.wait(HIGHLIGHT_TIME)
     squares[i].setFillColor(SQUARE_COLOR)
   #erase screen
-  for square in squares:
-    square.setAutoDraw(False)
-  win.flip()
-  core.wait(ISI_TIME)
+    #for square in squares:
+    #  square.setAutoDraw(False)
+    #win.flip()
+    #core.wait(ISI_TIME)
   #begin asking for the subject to recall pattern
   for square in squares:
     square.setAutoDraw(True)
-  instructions = visual.TextStim(win,text="Select the squares in the order they appeared. If you accidently click a square, click Back.", pos=(0,10),wrapWidth=40)
+  instructions = visual.TextStim(win,text="Select the squares in the order they appeared. If you accidently click a square, click Back.", pos=(0,10),wrapWidth=30)
   submitText = visual.TextStim(win,text="Submit",pos=(5,-8))
   submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
   backText = visual.TextStim(win,text="Back",pos=(-5,-8))
