@@ -81,7 +81,7 @@ __status__ = "Final"
 LETTERS=("F", "H", "J", "K", "L", "N", "P", "Q", "R", "S", "T", "Y")
 IN_BETWEEN_TRIALS_TIME = 0.5
 MATH_QUESTION_CHANCE_CORRECT = 0.5
-FEEDBACK_LENGTH = 2.000
+FEEDBACK_LENGTH = 3.000
 # letter display options
 LETTER_DISPLAY_TIME = 0.800
 LETTER_SIZE = 12       # for display size
@@ -162,7 +162,8 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Practice\n\nOn the screen, you will see a series of letters. You'll then be asked to reproduce the series at the end of the trial. Feel free to use any method such as acronyms, however do not say the letters out loud. \n\nClick to Continue")
+  instructions = visual.TextStim(win,text="Practice\n\nOn the screen, you will see a series of letters. You'll then be asked to reproduce the series at the end of the trial. "+
+                                          "Do not say the letters out loud. \n\nClick to Continue")
   instructions.draw()
   win.flip()
   # wait until mouse is pressed
@@ -193,7 +194,7 @@ def main(argv):
       colo = "Green"
       tempLog = "(True,"
     else:
-      colo = "Red"
+      colo = "Orange"
       tempLog = "(False,"
     visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),NUM_PRACTICE_TRIAL_LETTERS),color=colo).draw()
     win.flip()
@@ -203,7 +204,9 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win, text="You will now perform some simple math problems. The math problem will be something like:\n(10*2) + 2 = ? When you click, you'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. Go at a steady and quick pace but try not to get more than 15% wrong.\n\n Click to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="You will now perform some simple math problems. The math problem will be something like:\n(10*2) + 2 = ? "+
+                                           "When you click, you'll see an answer (for example: 22) and you should then decide whether the given answer is correct or incorrect. "+
+                                           "Go at a steady and quick pace but try not to get more than 15% wrong.\n\n Click to continue.", wrapWidth=30)
   while True:
     instructions.draw()
     win.flip()
@@ -222,12 +225,17 @@ def main(argv):
     mathPercentRight = (100.0 * sum([1 if mathTrials[i][0]=="True" else 0 for i in range(len(mathTrials))]))/len(mathTrials)
     if(mathPercentRight >= 85):
       break
-    instructions = visual.TextStim(win, text="You did not answer more than 85% of the math questions correctly. Please try your best. Try again. \n\nClick to continue")
+    instructions = visual.TextStim(win, text="You'll need to get your math accuracy up to 85% correct. Please try again with more concentration. \n\nClick to continue")
   ### SECTION 2 END
 
   ### SECTION 3 BEGIN
   log("Section 3")
-  instructions = visual.TextStim(win, text="We will now combine the last two tasks. Letters and Math problems will alternate. You will then be asked to recall all the letters from the series, indicating the order in which the letters were presented.\n\nYour score is valid only if you are at least 85% accurate in evaluating the math problems, so try to answer all of those problems correctly while trying also to remember the order of the letters.\n\nThis task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best. Remember to use any strategy to remember the letters, but do not say them out loud. \n\nClick to continue.",wrapWidth=30)
+  instructions = visual.TextStim(win, text="We will now combine the last two tasks. Letters and Math problems will alternate. "+
+                                           "You will then be asked to recall all the letters from the series, indicating the order in which the letters were presented."+
+                                           "\n\nYour score is valid only if you are at least 85% accurate in evaluating the math problems, "+
+                                           "so try to answer all of those problems correctly while trying also to remember the order of the letters."+
+                                           "\n\nThis task is difficult and most people find it challenging and frustrating at times. Keep a steady pace and do your best, "+
+                                           "and remember, do not say the letters out loud. \n\nClick to continue.", wrapWidth=30)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -269,10 +277,10 @@ def main(argv):
         numWrong = 0
       else:
         tempLog = "(False,"
-        colo = "Red"
+        colo = "Orange"
         losesound.play()
         numWrong += 1
-      mathcolo = "Green" if mathPercentRight >= 85 else "Red"
+      mathcolo = "Green" if mathPercentRight >= 85 else "Orange"
       visual.TextStim(win,text=("Math Score: %.0f%%" % (mathPercentRight)),color=mathcolo,pos=(12,9)).draw()
       visual.TextStim(win,text="You recalled {0} letters correctly out of {1}".format(correctness(temp[0],correctSeq).count("TT"),len(correctSeq)),color=colo,wrapWidth=30).draw()
       numerrors = sum([1 if mathQuestions[i][0]!="True" else 0 for i in range(len(mathQuestions))])
@@ -285,7 +293,7 @@ def main(argv):
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
         win.flip()
         log("Max O-SPAN: " + str(maxOspan[-1]))
-        core.wait(IN_BETWEEN_TRIALS_TIME)
+        core.wait(IN_BETWEEN_TRIALS_TIME*2)
         break
   ### SECTION 3 END
 
