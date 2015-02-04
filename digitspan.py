@@ -514,73 +514,35 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  instructions = visual.TextStim(win,text="Click or type the digits in the"+reverse+" order they appeared.", pos=(0,10),wrapWidth=30)
-  submitText = visual.TextStim(win,text="Submit",pos=(5,-5))
-  submitButton = visual.Rect(win,width=4, height=1.2, lineWidth=2)
-  backText = visual.TextStim(win,text="Back",pos=(-5,-5))
-  backButton = visual.Rect(win,width=3, height=1.2, lineWidth=2)
-  backButton.setPos((-5,-5))
-  submitButton.setPos((5,-5))
-  submitButton.setAutoDraw(True)
-  submitText.setAutoDraw(True)
-  backButton.setAutoDraw(True)
-  backText.setAutoDraw(True)
+  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared. Press delete if you want to erase the last letter. Press enter when you are done.", pos=(0,6),wrapWidth=30)
   instructions.setAutoDraw(True)
   instructions.draw()
-  submitButton.draw()
-  submitText.draw()
-  backButton.draw()
-  backText.draw()
-  letterRects = []
-  letterBoxes = []
-  i = 0
-  LETTERS = ["1","2","3","4","5","6","7","8","9","0"]
-  for i in range(len(LETTERS)):
-    if LETTERS[i] == "0":
-      tpos = (4*(-1.0+((i+1)%3)),3*(2.5-((i+1)/3)))
-    else:
-      tpos = (4*(-1.0+(i%3)),3*(2.5-(i/3)))
-    letterBoxes.append(visual.TextStim(win, text=LETTERS[i], pos=tpos))
-    letterRects.append( visual.Rect(win,width=1.2,height=1.2,lineWidth=2))
-    letterRects[i].setPos(tpos)
-    letterRects[i].setAutoDraw(True)
-    letterBoxes[i].setAutoDraw(True)
-    letterRects[i].draw()
-    letterBoxes[i].draw()
-    i += 1
   win.flip()
+  LETTERS = ["1","2","3","4","5","6","7","8","9","0"]
   timer = core.Clock()
   clicked = []
+  numbers2 = []
+  event.clearEvents()
   while(True):
     for i in range(len(LETTERS)):
-      if mouse.isPressedIn(letterRects[i]) or event.getKeys(keyList=['num_'+LETTERS[i],LETTERS[i]]):
+      if event.getKeys(keyList=['num_'+LETTERS[i],LETTERS[i],'['+LETTERS[i]+']']):
         clicked.append(int(LETTERS[i]))
-        letterBoxes[i].setColor(HIGHLIGHT_COLOR)
+        numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers2),0)))
+        numbers2[-1].setAutoDraw(True)
+        numbers2[-1].draw()
         win.flip()
         core.wait(0.200)
-        while mouse.isPressedIn(letterRects[i]):
-          pass
-        letterBoxes[i].setColor("White")
-        win.flip()
-    if mouse.isPressedIn(backButton) and len(clicked) > 0:
+    if event.getKeys(keyList=['backspace','delete','[.]']) and len(clicked) > 0:
       clicked.remove(clicked[len(clicked)-1])
-      backText.setColor(HIGHLIGHT_COLOR)
+      numbers2[-1].setAutoDraw(False)
+      numbers2.remove(numbers2[-1])
       win.flip()
-      core.wait(0.200)
-      while mouse.isPressedIn(backButton):
-        pass
-      backText.setColor("White")
-      win.flip()
-    if mouse.isPressedIn(submitButton) or event.getKeys(keyList=['num_enter','return']):
+      core.wait(0.250)
+    if event.getKeys(keyList=['num_enter','return']):
       #erase display
-      submitButton.setAutoDraw(False)
-      submitText.setAutoDraw(False)
-      backButton.setAutoDraw(False)
-      backText.setAutoDraw(False)
+      for n in numbers2:
+        n.setAutoDraw(False)
       instructions.setAutoDraw(False)
-      for i in range(len(LETTERS)):
-        letterRects[i].setAutoDraw(False)
-        letterBoxes[i].setAutoDraw(False)
       return ([int(i) for i in clicked],timer.getTime())
     if(event.getKeys(keyList=['q','escape'])):
       quit()
