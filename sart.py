@@ -61,7 +61,7 @@ DIGIT_SIZES = [1.8,2.7,3.5,3.8,4.5] # display sizes in cm
 TARGET_DIGIT = -1 # a random digit will be assigned in the beginning if -1
 NUM_DIGIT_SETS = 25
 MASK_TIME = 0.900
-MASK_DIAMETER = 4.5
+MASK_DIAMETER = 3.0
 # sound settings
 MAX_FAILS = 3
 CORRECT_FREQ = 440
@@ -146,7 +146,7 @@ def main(argv):
   core.wait(2)
 
   # begin practice trial
-  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.01,-0.63],lineWidth=10)
+  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.05,-0.39],lineWidth=10)
   mask2 = visual.TextStim(win,text="+",height=(MASK_DIAMETER+2.4))
   digitSet = range(DIGIT_RANGE[0],DIGIT_RANGE[1]+1) * NUM_PRACTICE_DIGIT_SETS
   random.shuffle(digitSet)
