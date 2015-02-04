@@ -137,6 +137,8 @@ def main(argv):
   winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
   losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   fixation = visual.Circle(win,radius=FIXATION_SIZE,fillColor="LightGray")
+  go_color = "DarkMagenta"
+  nogo_color = "DarkOrange"
   timer = core.Clock()
   #place text in circle
   stims = []
@@ -149,7 +151,7 @@ def main(argv):
 
   ###SECTION 1 PRACTICE BEGIN
   log("Section 1 Practice")
-  instructions = visual.TextStim(win,text="Part 1 Practice\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be either a larger Z, X, or P on the side of the screen, try to ignore it as you respond.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Part 1 Practice\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be a large distracting letter farther away from the center, that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -215,7 +217,7 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Remember, on the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. Try to ignore the Z, X, or P that appears on the sides. Try to be as fast and accurate as you can.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Part 1\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be a large Z, X, or P farther away from the center, that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -297,10 +299,10 @@ def main(argv):
       instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red object. If the object is blue, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is red however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
       instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red shape. If the object is blue square or a red circle, type a response: 2 for x and 0 for z.\nIf the object is a red square or a blue circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
-      visual.Rect(win,fillColor="Blue",pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor="Red",pos=(-4,-5),lineWidth=0).draw()
-      visual.Rect(win,fillColor="Red",pos=(5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor="Blue",pos=(4,-5),lineWidth=0).draw()
+      visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
+      visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
+      visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
+      visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
       visual.TextStim(win,text="Go",pos=(-5,-6)).draw()
       visual.TextStim(win,text="No Go",pos=(5,-6)).draw()
     instructions.draw()
@@ -320,20 +322,20 @@ def main(argv):
       nogo = random.random() < 0.25
       if condition_s2:
         if random.random() < 0.5:
-          shape = visual.Rect(win,fillColor=("Red" if nogo else "Blue"),height=2,width=2,lineWidth=0)
+          shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
         else:
-          shape = visual.Circle(win,fillColor=("Red" if nogo else "Blue"),radius=1,lineWidth=0)
+          shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
       else:
         if nogo:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor="Red",height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor="Blue",radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
         else:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor="Blue",height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor="Red",radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
       shape.setPos((1,0))
       shape.draw()
       letter.draw()
@@ -414,10 +416,10 @@ def main(argv):
       instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red object. If the object is blue, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is red however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
       instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red shape. If the object is blue square or a red circle, type a response: 2 for x and 0 for z.\nIf the object is a red square or a blue circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
-      visual.Rect(win,fillColor="Blue",pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor="Red",pos=(-4,-5),lineWidth=0).draw()
-      visual.Rect(win,fillColor="Red",pos=(5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor="Blue",pos=(4,-5),lineWidth=0).draw()
+      visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
+      visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
+      visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
+      visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
       visual.TextStim(win,text="Go",pos=(-5,-6)).draw()
       visual.TextStim(win,text="No Go",pos=(5,-6)).draw()
     instructions.draw()
@@ -437,20 +439,20 @@ def main(argv):
       nogo = random.random() < 0.25
       if condition_s2:
         if random.random() < 0.5:
-          shape = visual.Rect(win,fillColor=("Red" if nogo else "Blue"),height=2,width=2,lineWidth=0)
+          shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
         else:
-          shape = visual.Circle(win,fillColor=("Red" if nogo else "Blue"),radius=1,lineWidth=0)
+          shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
       else:
         if nogo:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor="Red",height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor="Blue",radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
         else:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor="Blue",height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor="Red",radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
       shape.setPos((1,0))
       shape.draw()
       letter.draw()
