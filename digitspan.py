@@ -96,7 +96,7 @@ def main(argv):
   #do only if we werent given initials from the command line
   if len(argv) == 1:
     while True:
-      dlg = gui.DlgFromDict(dictionary={'Initials':'','Test Number':'1'},title="Digit-Span Task")
+      dlg = gui.DlgFromDict(dictionary={'Class ID':'','Test Number':'1'},title="Digit-Span Task")
       if(dlg.OK):
         initials = dlg.data[0]
         testNo = int(dlg.data[1])
@@ -514,7 +514,7 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared. Press delete if you want to erase the last letter. Press enter when you are done.", pos=(0,6),wrapWidth=30)
+  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared. Press delete if you want to erase the last letter. Use the asterisk for a blank space. Press enter when you are done.", pos=(0,6),wrapWidth=30)
   instructions.setAutoDraw(True)
   instructions.draw()
   win.flip()
@@ -528,6 +528,13 @@ def validateSequence(win,mouse,reverse=''):
       if event.getKeys(keyList=['num_'+LETTERS[i],LETTERS[i],'['+LETTERS[i]+']']):
         clicked.append(int(LETTERS[i]))
         numbers2.append(visual.TextStim(win,text=LETTERS[i],color="DarkMagenta",pos=(-10+2*len(numbers2),0)))
+        numbers2[-1].setAutoDraw(True)
+        numbers2[-1].draw()
+        win.flip()
+        core.wait(0.200)
+    if event.getKeys(keyList=['asterisk']):
+        clicked.append("*")
+        numbers2.append(visual.TextStim(win,text="*",color="DarkMagenta",pos=(-10+2*len(numbers2),0)))
         numbers2[-1].setAutoDraw(True)
         numbers2[-1].draw()
         win.flip()
