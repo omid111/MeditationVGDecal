@@ -63,20 +63,20 @@ DIGIT_RANGE = (0,9)
 DIGIT_SIZES = [1.8,2.7,3.5,3.8,4.5] # display sizes in cm
 FIXATION_SIZE = 0.3
 FIXATION_TIME = 1.000
-# Experiment 1 Practice
-NUM_PRACTICE_TRIALS = 2   # per block
+# Experiment Practice
+NUM_PRACTICE_TRIALS = 10   # per block
 NUM_PRACTICE_BLOCKS = 2
 # Experiment 1
-NUM_TRIALS_PER_BLOCK = 1  # 72
+NUM_TRIALS_PER_BLOCK = 72  # 72
 NUM_BLOCKS = 2             # 10
 DISPLAY_TIME = 0.050 # time stimuli is displayed
 # Experiment 2
-NUM_TRIALS_PER_BLOCK2 = 1 # 48
+NUM_TRIALS_PER_BLOCK2 = 48 # 48
 NUM_BLOCKS2 = 2            # 2
 DISPLAY_TIME2 = 0.100 # time stimuli is displayed
 TIMEOUT = 3
 # Experiment 3
-NUM_TRIALS_PER_BLOCK3 = 1
+NUM_TRIALS_PER_BLOCK3 = 50
 NUM_BLOCKS3 = 2
 DISPLAY_TIME3 = 0.050 # time stimuli is displayed
 NUMBER_DISPLAY_TIME = 0.500 # time numbers are displayed
@@ -296,9 +296,9 @@ def main(argv):
   #begin drawing
   for block in range(1,NUM_PRACTICE_BLOCKS+1):
     if condition_s2:
-      instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red object. If the object is blue, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is red however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a orange or purple object. If the object is purple, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is orange however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
-      instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a blue or red shape. If the object is blue square or a red circle, type a response: 2 for x and 0 for z.\nIf the object is a red square or a blue circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a purple or orange shape. If the object is purple square or a orange circle, type a response: 2 for x and 0 for z.\nIf the object is a orange square or a purple circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -387,7 +387,7 @@ def main(argv):
       elif not pressed:
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
     condition_s2 = not condition_s2
   core.wait(TONE_LENGTH)
   s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -504,7 +504,7 @@ def main(argv):
       elif not pressed:
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
     condition_s2 = not condition_s2
   core.wait(TONE_LENGTH)
   s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -556,37 +556,50 @@ def main(argv):
       win.flip()
       core.wait(MASK_TIME)
       #display letter
-      letter.draw()
-      criticaldistractor.draw()
+      fixation.draw()
       win.flip()
-      core.wait(DISPLAY_TIME3)
+      core.wait(FIXATION_TIME)
+      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+      criticaldistractor.height=2.5
+      criticaldistractor.draw()
+      letters = ['z' if random.random() < 0.5 else 'x']
+      if condition_s1:
+        letters += ['o']*5
+      else:
+        letters += ['k','s','m','v','n']
+      random.shuffle(letters)
+      for i,stim in enumerate(stims):
+        stim.setText(letters[i])
+        stim.draw()
+      win.flip()
+      core.wait(DISPLAY_TIME)
       win.flip()
       timer.reset()
       event.clearEvents()
       while True:
         if event.getKeys(keyList=['num_0','0']):
-          if 'z' == letter.text:
-            tempLog = "(True"
+          if 'z' in letters:
+            tempLog = "(True, "
             winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
+            (log3_s1 if condition_s1 else log3_s6).append(1)
           else:
-            tempLog = "(False"
+            tempLog = "(False, "
             losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
+            (log3_s1 if condition_s1 else log3_s6).append(0)
           break
         elif event.getKeys(keyList=['num_2','2']):
-          if 'x' == letter.text:
+          if 'x' in letters:
             tempLog = "(True"
             winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
+            (log3_s1 if condition_s1 else log3_s6).append(1)
           else:
             tempLog = "(False"
             losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
+            (log3_s1 if condition_s1 else log3_s6).append(0)
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letter)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
       #number probe working memory
       core.wait(TONE_LENGTH)
       ans_true = random.random() < 0.5
@@ -681,37 +694,50 @@ def main(argv):
       win.flip()
       core.wait(MASK_TIME)
       #display letter
-      letter.draw()
-      criticaldistractor.draw()
+      fixation.draw()
       win.flip()
-      core.wait(DISPLAY_TIME3)
+      core.wait(FIXATION_TIME)
+      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+      criticaldistractor.height=2.5
+      criticaldistractor.draw()
+      letters = ['z' if random.random() < 0.5 else 'x']
+      if condition_s1:
+        letters += ['o']*5
+      else:
+        letters += ['k','s','m','v','n']
+      random.shuffle(letters)
+      for i,stim in enumerate(stims):
+        stim.setText(letters[i])
+        stim.draw()
+      win.flip()
+      core.wait(DISPLAY_TIME)
       win.flip()
       timer.reset()
       event.clearEvents()
       while True:
         if event.getKeys(keyList=['num_0','0']):
-          if 'z' == letter.text:
-            tempLog = "(True"
+          if 'z' in letters:
+            tempLog = "(True, "
             winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
+            (log3_s1 if condition_s1 else log3_s6).append(1)
           else:
-            tempLog = "(False"
+            tempLog = "(False, "
             losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
+            (log3_s1 if condition_s1 else log3_s6).append(0)
           break
         elif event.getKeys(keyList=['num_2','2']):
-          if 'x' == letter.text:
+          if 'x' in letters:
             tempLog = "(True"
             winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
+            (log3_s1 if condition_s1 else log3_s6).append(1)
           else:
             tempLog = "(False"
             losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
+            (log3_s1 if condition_s1 else log3_s6).append(0)
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letter)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
       #number probe working memory
       core.wait(TONE_LENGTH)
       ans_true = random.random() < 0.5

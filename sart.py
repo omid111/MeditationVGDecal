@@ -144,7 +144,7 @@ def main(argv):
   core.wait(2)
 
   # begin practice trial
-  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.01,-0.63],lineWidth=1000)
+  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.01,-0.63],lineWidth=10)
   mask2 = visual.TextStim(win,text="+",height=(MASK_DIAMETER+2.4))
   digitSet = range(DIGIT_RANGE[0],DIGIT_RANGE[1]+1) * NUM_PRACTICE_DIGIT_SETS
   random.shuffle(digitSet)
@@ -205,7 +205,7 @@ def main(argv):
   while 1 in mouse.getPressed():
     pass
 
-  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.01,-0.63],lineWidth=1000)
+  mask1 = visual.Circle(win,radius=MASK_DIAMETER/2,pos=[0.01,-0.63],lineWidth=10)
   mask2 = visual.TextStim(win,text="+",height=(MASK_DIAMETER+2.4))
   digitSet = range(DIGIT_RANGE[0],DIGIT_RANGE[1]+1) * NUM_DIGIT_SETS
   random.shuffle(digitSet)
