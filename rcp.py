@@ -55,8 +55,8 @@ __author__ = "Omid Rhezaii"
 __email__ = "omid@rhezaii.com"
 __copyright__ = "Copyright 2015, Michael Silver Lab"
 __credits__ = ["Omid Rhezaii", "Sahar Yousef", "Michael Silver"]
-__version__ = "1.0"
-__status__ = "Rough Draft"
+__version__ = "2.0"
+__status__ = "Final"
 
 # GLOBAL VARIABLE DECLARATIONS
 DIGIT_RANGE = (0,9)
@@ -64,19 +64,19 @@ DIGIT_SIZES = [1.8,2.7,3.5,3.8,4.5] # display sizes in cm
 FIXATION_SIZE = 0.3
 FIXATION_TIME = 1.000
 # Experiment Practice
-NUM_PRACTICE_TRIALS = 1 #10   # per block
+NUM_PRACTICE_TRIALS = 10 #10   # per block
 NUM_PRACTICE_BLOCKS = 2
 # Experiment 1
-NUM_TRIALS_PER_BLOCK = 10  # 72
+NUM_TRIALS_PER_BLOCK = 72  # 72
 NUM_BLOCKS = 2             # 10
 DISPLAY_TIME = 0.050 # time stimuli is displayed
 # Experiment 2
-NUM_TRIALS_PER_BLOCK2 = 10 # 48
+NUM_TRIALS_PER_BLOCK2 = 48 # 48
 NUM_BLOCKS2 = 2            # 2
 DISPLAY_TIME2 = 0.100 # time stimuli is displayed
 TIMEOUT = 3
 # Experiment 3
-NUM_TRIALS_PER_BLOCK3 = 10 # 50
+NUM_TRIALS_PER_BLOCK3 = 50 # 50
 NUM_BLOCKS3 = 2
 DISPLAY_TIME3 = 0.050 # time stimuli is displayed
 NUMBER_DISPLAY_TIME = 0.500 # time numbers are displayed
@@ -196,7 +196,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
             tempLog = "(True"
             winsound.play()
@@ -204,7 +204,7 @@ def main(argv):
             tempLog = "(False"
             losesound.play()
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if 'x' in letters:
             tempLog = "(True"
             winsound.play()
@@ -259,7 +259,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
             tempLog = "(True, "
             winsound.play()
@@ -269,7 +269,7 @@ def main(argv):
             losesound.play()
             (log_s1 if condition_s1 else log_s6).append(0)
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if 'x' in letters:
             tempLog = "(True"
             winsound.play()
@@ -357,7 +357,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while timer.getTime()<TIMEOUT:
-        if event.getKeys(keyList=['num_0','0']) and not pressed:
+        if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
           if 'z' == letter.text:
             if not nogo:
               tempLog = "(True"
@@ -373,7 +373,7 @@ def main(argv):
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
           break
-        elif event.getKeys(keyList=['num_2','2']) and not pressed:
+        elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
           if 'x' == letter.text:
             if not nogo:
               tempLog = "(True"
@@ -479,7 +479,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while timer.getTime()<TIMEOUT:
-        if event.getKeys(keyList=['num_0','0']) and not pressed:
+        if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
           if 'z' == letter.text:
             if not nogo:
               tempLog = "(True"
@@ -495,7 +495,7 @@ def main(argv):
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
           break
-        elif event.getKeys(keyList=['num_2','2']) and not pressed:
+        elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
           if 'x' == letter.text:
             if not nogo:
               tempLog = "(True"
@@ -598,7 +598,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
             tempLog = "(True, "
             winsound.play()
@@ -608,7 +608,7 @@ def main(argv):
             losesound.play()
             (log3_s1 if condition_s1 else log3_s6).append(0)
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if 'x' in letters:
             tempLog = "(True"
             winsound.play()
@@ -638,7 +638,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if ans_true:
             tempLog = "(False"
             losesound.play()
@@ -648,7 +648,7 @@ def main(argv):
             winsound.play()
             (log3_s1 if condition_s3 else log3_s6).append(1)
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if not ans_true:
             tempLog = "(False"
             losesound.play()
@@ -741,7 +741,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
             tempLog = "(True, "
             winsound.play()
@@ -751,7 +751,7 @@ def main(argv):
             losesound.play()
             (log3_s1 if condition_s1 else log3_s6).append(0)
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if 'x' in letters:
             tempLog = "(True"
             winsound.play()
@@ -781,7 +781,7 @@ def main(argv):
       timer.reset()
       event.clearEvents()
       while True:
-        if event.getKeys(keyList=['num_0','0']):
+        if event.getKeys(keyList=['num_0','0','[0]']):
           if ans_true:
             tempLog = "(False"
             losesound.play()
@@ -791,7 +791,7 @@ def main(argv):
             winsound.play()
             (log3_s1 if condition_s3 else log3_s6).append(1)
           break
-        elif event.getKeys(keyList=['num_2','2']):
+        elif event.getKeys(keyList=['num_2','2','[2]']):
           if not ans_true:
             tempLog = "(False"
             losesound.play()
