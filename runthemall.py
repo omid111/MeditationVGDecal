@@ -43,9 +43,9 @@ def main(argv):
 
   args = ['',initials,testNo]
   spanboard.main(args)
-  digitspan.main(args)
   ospan.main(args)
   sart.main(args)
+  digitspan.main(args)
   rcp.main(args)
 
 if __name__ == '__main__': main(sys.argv)
