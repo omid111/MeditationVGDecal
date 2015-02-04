@@ -523,7 +523,6 @@ def validateSequence(win,mouse,reverse=''):
   """
   instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they were recited. Press the delete button if you want to erase the last letter you typed. "+
                                           "For any digits that you do not remember, use the asterisk (*) button instead of guessing. Press enter when you are done.", pos=(0,6),wrapWidth=30)
-                                          "For any digits that you do not remember, use the asterisk (*) button instead of guessing. Press enter when you are done.", pos=(0,6),wrapWidth=30)
   instructions.setAutoDraw(True)
   instructions.draw()
   win.flip()
