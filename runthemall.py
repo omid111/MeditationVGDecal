@@ -14,7 +14,7 @@ def main(argv):
   #do only if we werent given initials from the command line
   if len(argv) == 1:
     while True:
-      dlg = gui.DlgFromDict(dictionary={'Initials':'','Test Number':'1'},title="SART Task")
+      dlg = gui.DlgFromDict(dictionary={'Class ID':'','Test Number':'1'},title="SART Task")
       if(dlg.OK):
         initials = dlg.data[0]
         testNo = int(dlg.data[1])
