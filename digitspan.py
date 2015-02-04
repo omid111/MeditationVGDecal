@@ -66,8 +66,8 @@ __status__ = "Final"
 # GLOBAL VARIABLE DECLARATIONS
 IN_BETWEEN_DIGITS_TIME = 0.5
 DIGIT_DISPLAY_TIME = 0.500 # time each number is displayed
-FORWARD_RANGE = (3,9)
-REVERSE_RANGE = (2,9)
+FORWARD_RANGE = (3,15)
+REVERSE_RANGE = (2,15)
 NUM_TRIAL_BLOCKS = 1 # if you change this please contact programmer
 DIGIT_SIZE = 12 # size of digits on screen display
 MAX_FAILS = 2 # in a row
@@ -407,20 +407,20 @@ def loadSequences():
   global fseqs, rseqs
   fseqs.append([9,7])
   fseqs.append([6,3])
-  #fseqs.append([5,8,2])
-  #fseqs.append([6,9,4])
-  #fseqs.append([7,2,8,6])
-  #fseqs.append([6,4,3,9])
-  #fseqs.append([4,2,7,3,1])
-  #fseqs.append([7,5,8,3,6])
-  #fseqs.append([3,9,2,4,8,7])
-  #fseqs.append([6,1,9,4,7,3])
-  #fseqs.append([4,1,7,9,3,8,6])
-  #fseqs.append([6,9,1,7,4,2,8])
-  #fseqs.append([3,8,2,9,6,1,7,4])
-  #fseqs.append([5,8,1,3,2,6,4,7])
-  #fseqs.append([2,7,5,8,6,3,1,9,4])
-  #fseqs.append([7,1,3,9,4,2,5,6,8])
+  fseqs.append([5,8,2])
+  fseqs.append([6,9,4])
+  fseqs.append([7,2,8,6])
+  fseqs.append([6,4,3,9])
+  fseqs.append([4,2,7,3,1])
+  fseqs.append([7,5,8,3,6])
+  fseqs.append([3,9,2,4,8,7])
+  fseqs.append([6,1,9,4,7,3])
+  fseqs.append([4,1,7,9,3,8,6])
+  fseqs.append([6,9,1,7,4,2,8])
+  fseqs.append([3,8,2,9,6,1,7,4])
+  fseqs.append([5,8,1,3,2,6,4,7])
+  fseqs.append([2,7,5,8,6,3,1,9,4])
+  fseqs.append([7,1,3,9,4,2,5,6,8])
   rseqs.append([3,1])
   rseqs.append([2,4])
   rseqs.append([4,6])
