@@ -550,7 +550,7 @@ def validateSequence(win,mouse,reverse=''):
       for n in numbers2:
         n.setAutoDraw(False)
       instructions.setAutoDraw(False)
-      return ([int(i) for i in clicked],timer.getTime())
+      return (clicked,timer.getTime())
     if(event.getKeys(keyList=['q','escape'])):
       quit()
 
