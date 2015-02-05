@@ -139,7 +139,8 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, click all of the numbers in the sequence in which they occurred.\n\nPress any key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, "+
+                                          "click all of the numbers in the sequence in which they occurred.\n\nPress any key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   #while 1 not in mouse.getPressed():
@@ -178,7 +179,8 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, enter the sequence in the same order you heard it.\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, "+
+                                          "enter the sequence in the same order you heard it.\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -248,7 +250,8 @@ def main(argv):
   ### SECTION 3 BEGIN
   log("Section 3")
   win.flip()
-  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, "+
+                                          "you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -274,7 +277,8 @@ def main(argv):
   # end practice
 
   win.flip()
-  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order."+
+                                          "\n\nPress a key to Continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -476,7 +480,7 @@ def makeresultsplot(name, xtext, ytext, xvalues, xvalues2, yvalues, yvalues2):
     ax.plot(xvalues2,yvalues2,marker='o',label="Reverse Digit Span")
     plt.xlabel(xtext)
     plt.ylabel(ytext)
-    plt.legend()
+    plt.legend(loc=0)
     plt.axis([min(FORWARD_RANGE[0],REVERSE_RANGE[0]),max(FORWARD_RANGE[1],REVERSE_RANGE[1]),0,101])
     plt.title("Graph of performance")
     plt.savefig(dataPath+str(name)+".png")
