@@ -399,8 +399,14 @@ def main(argv):
         (log2_s1 if condition_s2 else log2_s6).append(0)
       log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
   core.wait(TONE_LENGTH)
-  s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  if len(log2_s1) > 0:
+    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+  else:
+    s1accuracy2 = 0
+  if len(log2_s6) > 0:
+    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  else:
+    s6accuracy2 = 0
   #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
   #feedback.draw()
   log("S1 Accuracy: "+str(s1accuracy2))
@@ -428,7 +434,7 @@ def main(argv):
       instructions = visual.TextStim(win,text="Part 2b\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
                                               "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
                                               "If the object is a purple circle OR an orange square, don't type anything at all. "+
-                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")    
+                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -518,10 +524,15 @@ def main(argv):
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
       log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
-    condition_s2 = not condition_s2
   core.wait(TONE_LENGTH)
-  s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  if len(log2_s1) > 0:
+    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+  else:
+    s1accuracy2 = 0
+  if len(log2_s6) > 0:
+    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  else:
+    s6accuracy2 = 0
   #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
   #feedback.draw()
   log("S1 Accuracy: "+str(s1accuracy2))
@@ -635,10 +646,15 @@ def main(argv):
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
       log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
-    condition_s2 = not condition_s2
   core.wait(TONE_LENGTH)
-  s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  if len(log2_s1) > 0:
+    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+  else:
+    s1accuracy2 = 0
+  if len(log2_s6) > 0:
+    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  else:
+    s6accuracy2 = 0
   #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
   #feedback.draw()
   log("S1 Accuracy: "+str(s1accuracy2))
@@ -757,8 +773,14 @@ def main(argv):
         (log2_s1 if condition_s2 else log2_s6).append(0)
       log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
   core.wait(TONE_LENGTH)
-  s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  if len(log2_s1) > 0:
+    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+  else:
+    s1accuracy2 = 0
+  if len(log2_s6) > 0:
+    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+  else:
+    s6accuracy2 = 0
   #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
   #feedback.draw()
   log("S1 Accuracy: "+str(s1accuracy2))
