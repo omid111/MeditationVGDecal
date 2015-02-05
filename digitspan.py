@@ -532,7 +532,7 @@ def validateSequence(win,mouse,reverse=''):
         numbers2[-1].draw()
         win.flip()
         core.wait(0.200)
-    if event.getKeys(keyList=['backspace','delete','[.]']) and len(clicked) > 0:
+    if event.getKeys(keyList=['backspace','delete','[.]','period','.']) and len(clicked) > 0:
       clicked.remove(clicked[len(clicked)-1])
       numbers2[-1].setAutoDraw(False)
       numbers2.remove(numbers2[-1])
