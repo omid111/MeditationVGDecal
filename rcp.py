@@ -166,7 +166,7 @@ def main(argv):
   win.flip()
   losesound.play()
   core.wait(2)
-
+  condition_s1 = True
   #begin drawing
   for block in range(1,NUM_PRACTICE_BLOCKS+1):
     visual.TextStim(win,text="To start practice block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
