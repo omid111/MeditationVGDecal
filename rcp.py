@@ -67,11 +67,11 @@ FIXATION_TIME = 1.000
 NUM_PRACTICE_TRIALS = 10   # per block
 NUM_PRACTICE_BLOCKS = 2
 # Experiment 1
-NUM_TRIALS_PER_BLOCK = 7  # 72
+NUM_TRIALS_PER_BLOCK = 1  # 72
 NUM_BLOCKS = 2             # 10
 DISPLAY_TIME = 0.050 # time stimuli is displayed
 # Experiment 2
-NUM_TRIALS_PER_BLOCK2 = 4 # 48
+NUM_TRIALS_PER_BLOCK2 = 1 # 48
 NUM_BLOCKS2 = 2            # 2
 DISPLAY_TIME2 = 0.100 # time stimuli is displayed
 TIMEOUT = 3
@@ -151,7 +151,10 @@ def main(argv):
 
   ###SECTION 1 PRACTICE BEGIN
   log("Section 1 Practice")
-  instructions = visual.TextStim(win,text="Part 1 Practice\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be a large distracting letter farther away from the center, that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Part 1 Practice\n\nIn this task, you will see letters arranged in a circle near the center of the screen. "+
+                                          "One of these letters will be either an \'x\' or a \'z\'. If you see an \'x\', then press 2 with your index finger. "+
+                                          "Otherwise if you see a \'z\', then press 0 with your thumb. There will also be a large letter (either Z, X, or P) "+
+                                          "outside of this circle that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -217,7 +220,10 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Part 1\n\nOn the screen, you will see letters arranged in a circle in the center of the screen. If you see an x then please type 2 with your index finger. Otherwise if you see a z, then type a 0 with your thumb. There will be a large Z, X, or P farther away from the center, that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Part 1\n\nIn this task, you will see letters arranged in a circle near the center of the screen. "+
+                                          "One of these letters will be either an \'x\' or a \'z\'. If you see an \'x\', then press 2 with your index finger. "+
+                                          "Otherwise if you see a \'z\', then press 0 with your thumb. There will also be a large letter (either Z, X, or P) "+
+                                          "outside of this circle that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -296,9 +302,14 @@ def main(argv):
   #begin drawing
   for block in range(1,NUM_PRACTICE_BLOCKS+1):
     if condition_s2:
-      instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a orange or purple object. If the object is purple, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is orange however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Easy\n\nYou will now see letters in the center of the screen, along with a orange or purple object. "+
+                                              "Like before, then press 2 if you see an \'x\' and press 0 if you see a \'z\', but only do so if the object is purple. "+
+                                              "If the object is orange, then don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
-      instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a purple or orange shape. If the object is purple square or a orange circle, type a response: 2 for x and 0 for z.\nIf the object is a orange square or a purple circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Hard\n\nYou will now see letters in the center of the screen, along with a orange or purple object. "+
+                                              "Like before, then press 2 if you see an \'x\' and press 0 if you see a \'z\', but only do so if the object is a purple square or an orange circle.\n"+
+                                              "If the object is a orange square or a purple circle, then don't type anything at all. "+
+                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -413,9 +424,14 @@ def main(argv):
   #begin drawing
   for block in range(1,NUM_BLOCKS2+1):
     if condition_s2:
-      instructions = visual.TextStim(win,text="Part 2 Easy\n\nOn the screen, you will see a letters in the center of a screen along with a orange or purple object. If the object is purple, then you can type 2 if you see an x or if you see a z type 0 with your thumb. If the object is orange however, don't type anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Easy\n\nYou will now see letters in the center of the screen, along with a orange or purple object. "+
+                                              "Like before, then press 2 if you see an \'x\' and press 0 if you see a \'z\', but only do so if the object is purple. "+
+                                              "If the object is orange, then don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
     else:
-      instructions = visual.TextStim(win,text="Part 2 Hard\n\nOn the screen, you will see a letters in the center of a screen along with a purple or orange shape. If the object is purple square or a orange circle, type a response: 2 for x and 0 for z.\nIf the object is a orange square or a purple circle, then don't type anything at all. See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+      instructions = visual.TextStim(win,text="Part 2 Hard\n\nYou will now see letters in the center of the screen, along with a orange or purple object. "+
+                                              "Like before, then press 2 if you see an \'x\' and press 0 if you see a \'z\', but only do so if the object is a purple square or an orange circle.\n"+
+                                              "If the object is a orange square or a purple circle, then don't type anything at all. "+
+                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")      
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -520,14 +536,18 @@ def main(argv):
 
   ###SECTION 3 PRACTICE START
   log("Section 3 Practice")
-  instructions = visual.TextStim(win,text="Last Part Practice\n\nThis time you will be doing 2 memory related tasks. \n1. On the screen, you will see a either a 1 number or 6 numbers.\n2. Then you will see a letter. Similar to before, if you see an x you type 2, or if you see a z type 0. Do this part quickly because you only have 3 seconds.\n3.Afterwards, a digit is presented on screen. If you have seen the digit before the letter, press 2(True) otherwise press 0(False). \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Last Part Practice\n\nThis time you will be doing 2 memory related tasks. \n"+
+                                          "1. First, you will see some numbers.\n2. Then you will see a letter. "+
+                                          "Similar to before, if you see an \'x\' you press 2, or if you see a \'z\' press 0. "+
+                                          "Do this part quickly because you only have 3 seconds.\n3.Afterwards, a number will be presented on screen. "+
+                                          "If you saw this number in the original set (before the letter), press 2(True). Otherwise press 0(False). "+
+                                          "\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
   condition_s3 = random.random() < 0.5
   log3_s1 = []
   log3_s6 = []
-  condition_s1 = False
 
   #begin drawing
   for block in range(1,NUM_PRACTICE_BLOCKS+1):
@@ -645,8 +665,12 @@ def main(argv):
     condition_s3 = not condition_s3
   s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
   s6accuracy3 = (1.0*sum(log3_s6))/len(log3_s6)
+  feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy3*100,s6accuracy3*100)) )
+  feedback.draw()
   log("S1 Accuracy: "+str(s1accuracy3))
   log("S6 Accuracy: "+str(s6accuracy3))
+  win.flip()
+  core.wait(5)
   if s6accuracy3 < 0.65 or s1accuracy3 <0.75:
     visual.TextStim(win,text="Please bring your administrator to continue.").draw()
     win.flip()
@@ -655,7 +679,12 @@ def main(argv):
 
   ###SECTION 3 BEGIN
   log("Section 3")
-  instructions = visual.TextStim(win,text="Last Part\n\nThis time you will be doing 2 memory related tasks. \n1. On the screen, you will see a either a 1 number or 6 numbers.\n2. Then you will see a letter. Similar to before, if you see an x you type 2, or if you see a z type 0. Do this part quickly because you only have 3 seconds.\n3.Afterwards, a digit is presented on screen. If you have seen the digit before the letter, press 2(True) otherwise press 0(False). \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+  instructions = visual.TextStim(win,text="Last Part Practice\n\nThis time you will be doing 2 memory related tasks. \n"+
+                                          "1. First, you will see some numbers.\n2. Then you will see a letter. "+
+                                          "Similar to before, if you see an \'x\' you press 2, or if you see a \'z\' press 0. "+
+                                          "Do this part quickly because you only have 3 seconds.\n3.Afterwards, a number will be presented on screen. "+
+                                          "If you saw this number in the original set (before the letter), press 2(True). Otherwise press 0(False). "+
+                                          "\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
   event.waitKeys()
