@@ -139,8 +139,8 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Practice\n\nYou will hear a sequence of numbers. At the end of the sequence, using the numberpad, "+
-                                          "click all of the numbers in the sequence in which they occurred.\n\nPress any key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Practice\n\nIn this task, you will hear a sequence of numbers. When the audio finishes, "+
+                                          "enter all of the numbers in same order they were recited.\n\nPress any key to continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   #while 1 not in mouse.getPressed():
@@ -179,8 +179,8 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the number key pad shows up, "+
-                                          "enter the sequence in the same order you heard it.\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Again, listen to the sequence of numbers, and when the audio finishes, "+
+                                          "enter all of the numbers in same order they were recited.\n\nPress any key to continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -250,8 +250,9 @@ def main(argv):
   ### SECTION 3 BEGIN
   log("Section 3")
   win.flip()
-  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the number key pad shows up, "+
-                                          "you must enter them in REVERSE order.\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Reverse Practice\n\nNow you will hear a sequence of numbers, and when the audio is finished, "+
+                                          "enter the numbers you heard in REVERSE order. For example, if you hear 1,2,3, then you would "+
+                                          "type 3,2,1.\n\nPress any key to continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -277,8 +278,9 @@ def main(argv):
   # end practice
 
   win.flip()
-  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the number key pad shows up, you must enter them in REVERSE order."+
-                                          "\n\nPress a key to Continue",wrapWidth=30)
+  instructions = visual.TextStim(win,text="Again, you will hear a sequence of numbers, and when the audio is finished, "+
+                                          "enter the numbers you heard in REVERSE order. For example, if you hear 1,2,3, then you would "+
+                                          "type 3,2,1.\n\nPress any key to continue",wrapWidth=30)
   instructions.draw()
   win.flip()
   event.waitKeys()
@@ -519,7 +521,9 @@ def validateSequence(win,mouse,reverse=''):
   
   @return a tuple of the form: ([list of digits], time taken)
   """
-  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they appeared. Press delete if you want to erase the last letter. Use the asterisk for a blank space. Press enter when you are done.", pos=(0,6),wrapWidth=30)
+  instructions = visual.TextStim(win,text="Type the digits in the"+reverse+" order they were recited. Press the delete button if you want to erase the last letter you typed. "+
+                                          "For any digits that you do not remember, use the asterisk (*) button instead of guessing. Press enter when you are done.", pos=(0,6),wrapWidth=30)
+                                          "For any digits that you do not remember, use the asterisk (*) button instead of guessing. Press enter when you are done.", pos=(0,6),wrapWidth=30)
   instructions.setAutoDraw(True)
   instructions.draw()
   win.flip()
