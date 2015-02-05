@@ -246,8 +246,10 @@ def main(argv):
   results_overall = dict()
   maxOspan = []
   for block in range(NUM_TRIAL_BLOCKS):
-# set i at minimum set size
+    # set i at minimum set size
     ss = SET_SIZES[0]
+    if len(maxOspan) > 0:
+      ss = max(maxOspan[-1]-2,SET_SIZES[0])
     numWrong = 0
     maxOspan.append(0)
     while True:
@@ -289,6 +291,9 @@ def main(argv):
       core.wait(FEEDBACK_LENGTH)
       log(tempLog+str(correctSeq)+","+str(temp[0])+","+str(correctness(temp[0],correctSeq))+","+str(len(correctSeq))+","+str(temp[1])+")")
       if numWrong >= MAX_FAILS:
+        if maxOspan[-1] <= 0 and ss > SET_SIZES[0]:
+          ss -= 1
+          continue
         core.wait(TONE_LENGTH)
         visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
         win.flip()
