@@ -127,7 +127,9 @@ def main(argv):
 
   ### SECTION 1 BEGIN
   log("Section 1")
-  instructions = visual.TextStim(win,text="Practice\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Practice\n\nIn this task, a number will be shown on the screen. "+
+                                          "If it is not a %d, then click your mouse anywhere on the screen. If it is a %d" % (TARGET_DIGIT, TARGET_DIGIT) +
+                                          ", then do not click anywhere. Please give equal importance to accuracy and speed.\n\nClick to Continue", wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
@@ -197,7 +199,9 @@ def main(argv):
 
   ### SECTION 2 BEGIN
   log("Section 2")
-  instructions = visual.TextStim(win,text="Sustained Attention\n\nOn the screen, you will see a digit, if it is not a "+str(TARGET_DIGIT)+" then please click. If it is a "+str(TARGET_DIGIT)+", then do not click. Please give equal importance to accuracy and speed.\n\nClick to Continue",wrapWidth=40)
+  instructions = visual.TextStim(win,text="Sustained Attention\n\nIn this task, a number will be shown on the screen. "+
+                                          "If it is not %d, then click your mouse anywhere on the screen. If it is %d" % (TARGET_DIGIT, TARGET_DIGIT) +
+                                          ", then do not click anywhere. Please give equal importance to accuracy and speed.\n\nClick to Continue", wrapWidth=40)
   instructions.draw()
   win.flip()
   while 1 not in mouse.getPressed():
