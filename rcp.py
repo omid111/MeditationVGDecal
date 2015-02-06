@@ -157,6 +157,7 @@ def main(argv):
                                           "outside of this circle that you should ignore.\n\nPress spacebar key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
+  event.waitKeys(keyList=['space','q','escape'])
   visual.TextStim(win,text="This is the sound of a correct response.",color="LightGray").draw()
   win.flip()
   winsound.play()
