@@ -154,10 +154,9 @@ def main(argv):
   instructions = visual.TextStim(win,text="Part 1 Practice\n\nIn this task, you will see letters arranged in a circle near the center of the screen. "+
                                           "One of these letters will be either an \'x\' or a \'z\'. If there was an \'x\', press 2 with your index finger, "+
                                           "or if there was a \'z\', press 0 with your thumb. There will also be a large letter (either Z, X, or P) "+
-                                          "outside of this circle that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+                                          "outside of this circle that you should ignore.\n\nPress spacebar key to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
-  event.waitKeys()
   visual.TextStim(win,text="This is the sound of a correct response.",color="LightGray").draw()
   win.flip()
   winsound.play()
@@ -222,10 +221,10 @@ def main(argv):
   instructions = visual.TextStim(win,text="Part 1\n\nIn this task, you will see letters arranged in a circle near the center of the screen. "+
                                           "One of these letters will be either an \'x\' or a \'z\'. If there was an \'x\', press 2 with your index finger, "+
                                           "or if there was a \'z\', press 0 with your thumb. There will also be a large letter (either Z, X, or P) "+
-                                          "outside of this circle that you should ignore.\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+                                          "outside of this circle that you should ignore.\n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
-  event.waitKeys()
+  event.waitKeys(keyList=['space','q','escape'])
 
   condition_s1 = random.random() < 0.5
   log_s1 = []
@@ -295,128 +294,131 @@ def main(argv):
   ### SECTION 2 PRACTICE START
   log("Section 2 Practice")
   condition_s2 = random.random() < 0.5
-  log2_s1 = []
-  log2_s6 = []
 
   #begin drawing
-  for block in range(1,NUM_PRACTICE_BLOCKS+1):
-    if condition_s2:
-      instructions = visual.TextStim(win,text="Part 2a Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
-                                              "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
-                                              "If the shape is orange, don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
-    else:
-      instructions = visual.TextStim(win,text="Part 2b Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
-                                              "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
-                                              "If the object is a purple circle OR an orange square, don't type anything at all. "+
-                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
-      visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
-      visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
-      visual.TextStim(win,text="Press",pos=(-5,-6)).draw()
-      visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
-    instructions.draw()
-    win.flip()
-    event.waitKeys()
-    #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
-    #event.waitKeys(keyList=['space','q','escape'])
-    for trial in range(NUM_PRACTICE_TRIALS):
-      fixation.draw()
-      win.flip()
-      core.wait(FIXATION_TIME)
-      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
-      criticaldistractor.height=2
-      tempLog = "(timeout,"
-      pressed = False
-      letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-1,0),height=2)
-      nogo = random.random() < 0.25
+  while True:
+    log2_s1 = []
+    log2_s6 = []
+    for block in range(1,NUM_PRACTICE_BLOCKS+1):
       if condition_s2:
-        if random.random() < 0.5:
-          shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
-        else:
-          shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
+        instructions = visual.TextStim(win,text="Part 2a Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
+                                                "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
+                                                "If the shape is orange, don't press anything at all. \n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
       else:
-        if nogo:
+        instructions = visual.TextStim(win,text="Part 2b Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
+                                                "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
+                                                "If the object is a purple circle OR an orange square, don't type anything at all. "+
+                                                "See below for summary:\n\nPress spacebar to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+        visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
+        visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
+        visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
+        visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
+        visual.TextStim(win,text="Press",pos=(-5,-6)).draw()
+        visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
+      instructions.draw()
+      win.flip()
+      event.waitKeys(keyList=['space','q','escape'])
+      #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
+      #event.waitKeys(keyList=['space','q','escape'])
+      for trial in range(NUM_PRACTICE_TRIALS):
+        fixation.draw()
+        win.flip()
+        core.wait(FIXATION_TIME)
+        criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+        criticaldistractor.height=2
+        tempLog = "(timeout,"
+        pressed = False
+        letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-1,0),height=2)
+        nogo = random.random() < 0.25
+        if condition_s2:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
         else:
-          if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
+          if nogo:
+            if random.random() < 0.5:
+              shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
+            else:
+              shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
-      shape.setPos((1,0))
-      shape.draw()
-      letter.draw()
-      criticaldistractor.draw()
-      win.flip()
-      core.wait(DISPLAY_TIME2)
-      win.flip()
-      timer.reset()
-      event.clearEvents()
-      while timer.getTime()<TIMEOUT:
-        if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
-          if 'z' == letter.text:
-            if not nogo:
-              tempLog = "(True"
-              winsound.play()
-              (log2_s1 if condition_s2 else log2_s6).append(1)
+            if random.random() < 0.5:
+              shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
+            else:
+              shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
+        shape.setPos((1,0))
+        shape.draw()
+        letter.draw()
+        criticaldistractor.draw()
+        win.flip()
+        core.wait(DISPLAY_TIME2)
+        win.flip()
+        timer.reset()
+        event.clearEvents()
+        while timer.getTime()<TIMEOUT:
+          if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
+            if 'z' == letter.text:
+              if not nogo:
+                tempLog = "(True"
+                winsound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(1)
+              else:
+                tempLog = "(False"
+                losesound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
               tempLog = "(False"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
-          else:
-            tempLog = "(False"
-            losesound.play()
-            (log2_s1 if condition_s2 else log2_s6).append(0)
-          pressed = True
-          break
-        elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
-          if 'x' == letter.text:
-            if not nogo:
-              tempLog = "(True"
-              winsound.play()
-              (log2_s1 if condition_s2 else log2_s6).append(1)
+            pressed = True
+            break
+          elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
+            if 'x' == letter.text:
+              if not nogo:
+                tempLog = "(True"
+                winsound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(1)
+              else:
+                tempLog = "(False"
+                losesound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
               tempLog = "(False"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
-          else:
-            tempLog = "(False"
-            losesound.play()
-            (log2_s1 if condition_s2 else log2_s6).append(0)
-          pressed = True
-          break
-        elif event.getKeys(keyList=['q','escape']):
-          quit()
-      if nogo and not pressed:
-        tempLog = "(True"
-        (log2_s1 if condition_s2 else log2_s6).append(1)
-        winsound.play()
-      elif not pressed:
-        losesound.play()
-        (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
-  core.wait(TONE_LENGTH)
-  if len(log2_s1) > 0:
-    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  else:
-    s1accuracy2 = 0
-  if len(log2_s6) > 0:
-    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
-  else:
-    s6accuracy2 = 0
-  #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
-  #feedback.draw()
-  log("S1 Accuracy: "+str(s1accuracy2))
-  log("S6 Accuracy: "+str(s6accuracy2))
-  #win.flip()
-  #core.wait(5)
-  if s6accuracy2 < 0.65 or s1accuracy2 <0.75:
-    visual.TextStim(win,text="Please bring your administrator to continue.").draw()
-    win.flip()
-    event.waitKeys()
+            pressed = True
+            break
+          elif event.getKeys(keyList=['q','escape']):
+            quit()
+        if nogo and not pressed:
+          tempLog = "(True"
+          (log2_s1 if condition_s2 else log2_s6).append(1)
+          winsound.play()
+        elif not pressed:
+          losesound.play()
+          (log2_s1 if condition_s2 else log2_s6).append(0)
+        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+    core.wait(TONE_LENGTH)
+    if len(log2_s1) > 0:
+      s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+    else:
+      s1accuracy2 = 0
+    if len(log2_s6) > 0:
+      s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+    else:
+      s6accuracy2 = 0
+    #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
+    #feedback.draw()
+    log("S1 Accuracy: "+str(s1accuracy2))
+    log("S6 Accuracy: "+str(s6accuracy2))
+    #win.flip()
+    #core.wait(5)
+    if s6accuracy2 < 0.65 and s1accuracy2 <0.65:
+      visual.TextStim(win,text="Please read over the instructions very carefully one more time\n\nPress the spacebar to continue.").draw()
+      win.flip()
+      event.waitKeys(keyList=['space','q','escape'])
+    else:
+      break
   ###SECTION 2 PRACTICE END
 
   ###SECTION 2 BEGIN
@@ -429,12 +431,12 @@ def main(argv):
     if condition_s2:
       instructions = visual.TextStim(win,text="Part 2a\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
                                               "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
-                                              "If the shape is orange, don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+                                              "If the shape is orange, don't press anything at all. \n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
     else:
       instructions = visual.TextStim(win,text="Part 2b\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
                                               "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
                                               "If the object is a purple circle OR an orange square, don't type anything at all. "+
-                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+                                              "See below for summary:\n\nPress spacebar to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -443,7 +445,7 @@ def main(argv):
       visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
     instructions.draw()
     win.flip()
-    event.waitKeys()
+    event.waitKeys(keyList=['space','q','escape'])
     #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
     #event.waitKeys(keyList=['space','q','escape'])
     for trial in range(NUM_TRIALS_PER_BLOCK2):
@@ -543,128 +545,131 @@ def main(argv):
   #SECTION 2 PRACTICE 2 START
   log("Section 2 Practice")
   condition_s2 = not condition_s2
-  log2_s1 = []
-  log2_s6 = []
 
   #begin drawing
-  for block in range(1,NUM_PRACTICE_BLOCKS+1):
-    if condition_s2:
-      instructions = visual.TextStim(win,text="Part 2a Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
-                                              "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
-                                              "If the shape is orange, don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
-    else:
-      instructions = visual.TextStim(win,text="Part 2b Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
-                                              "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
-                                              "If the object is a purple circle OR an orange square, don't type anything at all. "+
-                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
-      visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
-      visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
-      visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
-      visual.TextStim(win,text="Press",pos=(-5,-6)).draw()
-      visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
-    instructions.draw()
-    win.flip()
-    event.waitKeys()
-    #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
-    #event.waitKeys(keyList=['space','q','escape'])
-    for trial in range(NUM_PRACTICE_TRIALS):
-      fixation.draw()
-      win.flip()
-      core.wait(FIXATION_TIME)
-      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
-      criticaldistractor.height=2
-      tempLog = "(timeout,"
-      pressed = False
-      letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-1,0),height=2)
-      nogo = random.random() < 0.25
+  while True:
+    log2_s1 = []
+    log2_s6 = []
+    for block in range(1,NUM_PRACTICE_BLOCKS+1):
       if condition_s2:
-        if random.random() < 0.5:
-          shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
-        else:
-          shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
+        instructions = visual.TextStim(win,text="Part 2a Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
+                                                "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
+                                                "If the shape is orange, don't press anything at all. \n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
       else:
-        if nogo:
+        instructions = visual.TextStim(win,text="Part 2b Practice\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
+                                                "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
+                                                "If the object is a purple circle OR an orange square, don't type anything at all. "+
+                                                "See below for summary:\n\nPress spacebar to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
+        visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
+        visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
+        visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
+        visual.Circle(win,fillColor=go_color,pos=(4,-5),lineWidth=0).draw()
+        visual.TextStim(win,text="Press",pos=(-5,-6)).draw()
+        visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
+      instructions.draw()
+      win.flip()
+      event.waitKeys(keyList=['space','q','escape'])
+      #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
+      #event.waitKeys(keyList=['space','q','escape'])
+      for trial in range(NUM_PRACTICE_TRIALS):
+        fixation.draw()
+        win.flip()
+        core.wait(FIXATION_TIME)
+        criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+        criticaldistractor.height=2
+        tempLog = "(timeout,"
+        pressed = False
+        letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-1,0),height=2)
+        nogo = random.random() < 0.25
+        if condition_s2:
           if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
+            shape = visual.Rect(win,fillColor=(nogo_color if nogo else go_color),height=2,width=2,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
+            shape = visual.Circle(win,fillColor=(nogo_color if nogo else go_color),radius=1,lineWidth=0)
         else:
-          if random.random() < 0.5:
-            shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
+          if nogo:
+            if random.random() < 0.5:
+              shape = visual.Rect(win,fillColor=nogo_color,height=2,width=2,lineWidth=0)
+            else:
+              shape = visual.Circle(win,fillColor=go_color,radius=1,lineWidth=0)
           else:
-            shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
-      shape.setPos((1,0))
-      shape.draw()
-      letter.draw()
-      criticaldistractor.draw()
-      win.flip()
-      core.wait(DISPLAY_TIME2)
-      win.flip()
-      timer.reset()
-      event.clearEvents()
-      while timer.getTime()<TIMEOUT:
-        if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
-          if 'z' == letter.text:
-            if not nogo:
-              tempLog = "(True"
-              winsound.play()
-              (log2_s1 if condition_s2 else log2_s6).append(1)
+            if random.random() < 0.5:
+              shape = visual.Rect(win,fillColor=go_color,height=2,width=2,lineWidth=0)
+            else:
+              shape = visual.Circle(win,fillColor=nogo_color,radius=1,lineWidth=0)
+        shape.setPos((1,0))
+        shape.draw()
+        letter.draw()
+        criticaldistractor.draw()
+        win.flip()
+        core.wait(DISPLAY_TIME2)
+        win.flip()
+        timer.reset()
+        event.clearEvents()
+        while timer.getTime()<TIMEOUT:
+          if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
+            if 'z' == letter.text:
+              if not nogo:
+                tempLog = "(True"
+                winsound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(1)
+              else:
+                tempLog = "(False"
+                losesound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
               tempLog = "(False"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
-          else:
-            tempLog = "(False"
-            losesound.play()
-            (log2_s1 if condition_s2 else log2_s6).append(0)
-          pressed = True
-          break
-        elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
-          if 'x' == letter.text:
-            if not nogo:
-              tempLog = "(True"
-              winsound.play()
-              (log2_s1 if condition_s2 else log2_s6).append(1)
+            pressed = True
+            break
+          elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
+            if 'x' == letter.text:
+              if not nogo:
+                tempLog = "(True"
+                winsound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(1)
+              else:
+                tempLog = "(False"
+                losesound.play()
+                (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
               tempLog = "(False"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
-          else:
-            tempLog = "(False"
-            losesound.play()
-            (log2_s1 if condition_s2 else log2_s6).append(0)
-          pressed = True
-          break
-        elif event.getKeys(keyList=['q','escape']):
-          quit()
-      if nogo and not pressed:
-        tempLog = "(True"
-        (log2_s1 if condition_s2 else log2_s6).append(1)
-        winsound.play()
-      elif not pressed:
-        losesound.play()
-        (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
-  core.wait(TONE_LENGTH)
-  if len(log2_s1) > 0:
-    s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
-  else:
-    s1accuracy2 = 0
-  if len(log2_s6) > 0:
-    s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
-  else:
-    s6accuracy2 = 0
-  #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
-  #feedback.draw()
-  log("S1 Accuracy: "+str(s1accuracy2))
-  log("S6 Accuracy: "+str(s6accuracy2))
-  #win.flip()
-  #core.wait(5)
-  if s6accuracy2 < 0.65 or s1accuracy2 <0.75:
-    visual.TextStim(win,text="Please bring your administrator to continue.").draw()
-    win.flip()
-    event.waitKeys()
+            pressed = True
+            break
+          elif event.getKeys(keyList=['q','escape']):
+            quit()
+        if nogo and not pressed:
+          tempLog = "(True"
+          (log2_s1 if condition_s2 else log2_s6).append(1)
+          winsound.play()
+        elif not pressed:
+          losesound.play()
+          (log2_s1 if condition_s2 else log2_s6).append(0)
+        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+    core.wait(TONE_LENGTH)
+    if len(log2_s1) > 0:
+      s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
+    else:
+      s1accuracy2 = 0
+    if len(log2_s6) > 0:
+      s6accuracy2 = (1.0*sum(log2_s6))/len(log2_s6)
+    else:
+      s6accuracy2 = 0
+    #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy2*100,s6accuracy2*100)) )
+    #feedback.draw()
+    log("S1 Accuracy: "+str(s1accuracy2))
+    log("S6 Accuracy: "+str(s6accuracy2))
+    #win.flip()
+    #core.wait(5)
+    if s6accuracy2 < 0.65 and s1accuracy2 <0.65:
+      visual.TextStim(win,text="Please read over the instructions very carefully one more time\n\nPress the spacebar to continue.").draw()
+      win.flip()
+      event.waitKeys(keyList=['space','q','escape'])
+    else:
+      break
   ###SECTION 2 PRACTICE END
 
   ###SECTION 2 BEGIN
@@ -677,12 +682,12 @@ def main(argv):
     if condition_s2:
       instructions = visual.TextStim(win,text="Part 2a\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
                                               "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is purple. "+
-                                              "If the shape is orange, don't press anything at all. \n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+                                              "If the shape is orange, don't press anything at all. \n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
     else:
       instructions = visual.TextStim(win,text="Part 2b\n\nYou will now see letters in the center of the screen, along with an orange or purple shape. "+
                                               "Like before, press 2 if you see an \'x\' or press 0 if you see a \'z\', BUT only do so if the shape is a purple square OR an orange circle.\n"+
                                               "If the object is a purple circle OR an orange square, don't type anything at all. "+
-                                              "See below for summary:\n\nPress any key to continue.",pos=(0,2),wrapWidth=40,color="LightGray")    
+                                              "See below for summary:\n\nPress spacebar to continue.",pos=(0,2),wrapWidth=40,color="LightGray")
       visual.Rect(win,fillColor=go_color,pos=(-5,-5),height=1,width=1,lineWidth=0).draw()
       visual.Circle(win,fillColor=nogo_color,pos=(-4,-5),lineWidth=0).draw()
       visual.Rect(win,fillColor=nogo_color,pos=(5,-5),height=1,width=1,lineWidth=0).draw()
@@ -691,7 +696,7 @@ def main(argv):
       visual.TextStim(win,text="Do Not Press",pos=(5,-6)).draw()
     instructions.draw()
     win.flip()
-    event.waitKeys()
+    event.waitKeys(keyList=['space','q','escape'])
     #visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_PRACTICE_BLOCKS)+", press the spacebar.").draw()
     #event.waitKeys(keyList=['space','q','escape'])
     for trial in range(NUM_TRIALS_PER_BLOCK2):
@@ -792,146 +797,149 @@ def main(argv):
 
   ###SECTION 3 PRACTICE START
   log("Section 3 Practice")
-  instructions = visual.TextStim(win,text="Last Part Practice\n\nThis time you will be doing 2 memory related tasks. \n"+
-                                          "1. First, you will see some numbers.\n2. Then, you will see letters arranged in a circle near the center of the screen. "+
-                                          "Similar to before, if you see an \'x\' you press 2, or if you see a \'z\' press 0. \n"+
-                                          "3. Afterwards, a number will be presented on screen. "+
-                                          "If you saw this number in the original set (before the letters), press 2. Otherwise, press 0. "+
-                                          "\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
-  instructions.draw()
-  win.flip()
-  event.waitKeys()
   condition_s3 = random.random() < 0.5
-  log3_s1 = []
-  log3_s6 = []
   condition_s1 = True
 
   #begin drawing
-  for block in range(1,NUM_PRACTICE_BLOCKS+1):
-    visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_BLOCKS3)+", press the spacebar.").draw()
+  while True:
+    log3_s1 = []
+    log3_s6 = []
+    instructions = visual.TextStim(win,text="Last Part Practice\n\nThis time you will be doing 2 memory related tasks. \n"+
+                                            "1. First, you will see some numbers.\n2. Then, you will see letters arranged in a circle near the center of the screen. "+
+                                            "Similar to before, if you see an \'x\' you press 2, or if you see a \'z\' press 0. \n"+
+                                            "3. Afterwards, a number will be presented on screen. "+
+                                            "If you saw this number in the original set (before the letters), press 2. Otherwise, press 0. "+
+                                            "\n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
+    instructions.draw()
     win.flip()
     event.waitKeys(keyList=['space','q','escape'])
-    for trial in range(NUM_PRACTICE_TRIALS):
-      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
-      criticaldistractor.height=2.5
-      letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-0.5,0),height=2)
-      numbers = []
-      if condition_s3:
-        numbers.append(random.choice(range(10)))
-      else:
-        for i in range(6):
-          a = range(10)
-          random.shuffle(a)
-          numbers = a[:6]
-      #display number
-      number = visual.TextStim(win,text=''.join([str(n) for n in numbers]),height=2)
-      number.draw()
+    for block in range(1,NUM_PRACTICE_BLOCKS+1):
+      visual.TextStim(win,text="To start block "+str(block)+" of " + str(NUM_BLOCKS3)+", press the spacebar.").draw()
       win.flip()
-      core.wait(NUMBER_DISPLAY_TIME)
-      #display mask
-      number.text = '.........'
-      number.draw()
-      win.flip()
-      core.wait(MASK_TIME)
-      #display letter
-      fixation.draw()
-      win.flip()
-      core.wait(FIXATION_TIME)
-      criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
-      criticaldistractor.height=2.5
-      criticaldistractor.draw()
-      letters = ['z' if random.random() < 0.5 else 'x']
-      if condition_s1:
-        letters += ['o']*5
-      else:
-        letters += ['k','s','m','v','n']
-      random.shuffle(letters)
-      for i,stim in enumerate(stims):
-        stim.setText(letters[i])
-        stim.draw()
-      win.flip()
-      core.wait(DISPLAY_TIME)
-      win.flip()
-      timer.reset()
-      event.clearEvents()
-      while True:
-        if event.getKeys(keyList=['num_0','0','[0]']):
-          if 'z' in letters:
-            tempLog = "(True, "
-            winsound.play()
-            (log3_s1 if condition_s1 else log3_s6).append(1)
-          else:
-            tempLog = "(False, "
-            losesound.play()
-            (log3_s1 if condition_s1 else log3_s6).append(0)
-          break
-        elif event.getKeys(keyList=['num_2','2','[2]']):
-          if 'x' in letters:
-            tempLog = "(True"
-            winsound.play()
-            (log3_s1 if condition_s1 else log3_s6).append(1)
-          else:
-            tempLog = "(False"
-            losesound.play()
-            (log3_s1 if condition_s1 else log3_s6).append(0)
-          break
-        elif event.getKeys(keyList=['q','escape']):
-          quit()
-      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
-      #number probe working memory
-      core.wait(TONE_LENGTH)
-      ans_true = random.random() < 0.5
-      if ans_true:
-        letter.text = random.choice(numbers)
-      else:
+      event.waitKeys(keyList=['space','q','escape'])
+      for trial in range(NUM_PRACTICE_TRIALS):
+        criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+        criticaldistractor.height=2.5
+        letter = visual.TextStim(win, text=('z' if random.random() < 0.5 else 'x'),pos=(-0.5,0),height=2)
+        numbers = []
         if condition_s3:
-          temp = range(10)
-          temp.remove(numbers[0])
-          letter.text = random.choice(temp)
+          numbers.append(random.choice(range(10)))
         else:
-          letter.text = random.choice(a[6:])
-      letter.draw()
+          for i in range(6):
+            a = range(10)
+            random.shuffle(a)
+            numbers = a[:6]
+        #display number
+        number = visual.TextStim(win,text=''.join([str(n) for n in numbers]),height=2)
+        number.draw()
+        win.flip()
+        core.wait(NUMBER_DISPLAY_TIME)
+        #display mask
+        number.text = '.........'
+        number.draw()
+        win.flip()
+        core.wait(MASK_TIME)
+        #display letter
+        fixation.draw()
+        win.flip()
+        core.wait(FIXATION_TIME)
+        criticaldistractor = visual.TextStim(win,text=random.choice(["P","Z","X"]),pos=random.choice([(7,0),(-7,0),(0,-7),(0,7)]))
+        criticaldistractor.height=2.5
+        criticaldistractor.draw()
+        letters = ['z' if random.random() < 0.5 else 'x']
+        if condition_s1:
+          letters += ['o']*5
+        else:
+          letters += ['k','s','m','v','n']
+        random.shuffle(letters)
+        for i,stim in enumerate(stims):
+          stim.setText(letters[i])
+          stim.draw()
+        win.flip()
+        core.wait(DISPLAY_TIME)
+        win.flip()
+        timer.reset()
+        event.clearEvents()
+        while True:
+          if event.getKeys(keyList=['num_0','0','[0]']):
+            if 'z' in letters:
+              tempLog = "(True, "
+              winsound.play()
+              (log3_s1 if condition_s1 else log3_s6).append(1)
+            else:
+              tempLog = "(False, "
+              losesound.play()
+              (log3_s1 if condition_s1 else log3_s6).append(0)
+            break
+          elif event.getKeys(keyList=['num_2','2','[2]']):
+            if 'x' in letters:
+              tempLog = "(True"
+              winsound.play()
+              (log3_s1 if condition_s1 else log3_s6).append(1)
+            else:
+              tempLog = "(False"
+              losesound.play()
+              (log3_s1 if condition_s1 else log3_s6).append(0)
+            break
+          elif event.getKeys(keyList=['q','escape']):
+            quit()
+        log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
+        #number probe working memory
+        core.wait(TONE_LENGTH)
+        ans_true = random.random() < 0.5
+        if ans_true:
+          letter.text = random.choice(numbers)
+        else:
+          if condition_s3:
+            temp = range(10)
+            temp.remove(numbers[0])
+            letter.text = random.choice(temp)
+          else:
+            letter.text = random.choice(a[6:])
+        letter.draw()
+        win.flip()
+        timer.reset()
+        event.clearEvents()
+        while True:
+          if event.getKeys(keyList=['num_0','0','[0]']):
+            if ans_true:
+              tempLog = "(False"
+              losesound.play()
+              (log3_s1 if condition_s3 else log3_s6).append(0)
+            else:
+              tempLog = "(True"
+              winsound.play()
+              (log3_s1 if condition_s3 else log3_s6).append(1)
+            break
+          elif event.getKeys(keyList=['num_2','2','[2]']):
+            if not ans_true:
+              tempLog = "(False"
+              losesound.play()
+              (log3_s1 if condition_s3 else log3_s6).append(0)
+            else:
+              tempLog = "(True"
+              winsound.play()
+              (log3_s1 if condition_s3 else log3_s6).append(1)
+            break
+          elif event.getKeys(keyList=['q','escape']):
+            quit()
+        log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()))
+        core.wait(TONE_LENGTH)
+      condition_s3 = not condition_s3
+    s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
+    s6accuracy3 = (1.0*sum(log3_s6))/len(log3_s6)
+    #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy3*100,s6accuracy3*100)) )
+    #feedback.draw()
+    log("S1 Accuracy: "+str(s1accuracy3))
+    log("S6 Accuracy: "+str(s6accuracy3))
+    #win.flip()
+    #core.wait(5)
+    if s6accuracy3 < 0.65 and s1accuracy3 <0.65:
+      visual.TextStim(win,text="Please read over the instructions very carefully one more time\n\nPress the spacebar to continue.").draw()
       win.flip()
-      timer.reset()
-      event.clearEvents()
-      while True:
-        if event.getKeys(keyList=['num_0','0','[0]']):
-          if ans_true:
-            tempLog = "(False"
-            losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
-          else:
-            tempLog = "(True"
-            winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
-          break
-        elif event.getKeys(keyList=['num_2','2','[2]']):
-          if not ans_true:
-            tempLog = "(False"
-            losesound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(0)
-          else:
-            tempLog = "(True"
-            winsound.play()
-            (log3_s1 if condition_s3 else log3_s6).append(1)
-          break
-        elif event.getKeys(keyList=['q','escape']):
-          quit()
-      log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()))
-      core.wait(TONE_LENGTH)
-    condition_s3 = not condition_s3
-  s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
-  s6accuracy3 = (1.0*sum(log3_s6))/len(log3_s6)
-  #feedback = visual.TextStim(win, text=("You had an accuracy of: %.0f%% for the easy part\n\nYou had an accuracy of: %.0f%% for the hard part" % (s1accuracy3*100,s6accuracy3*100)) )
-  #feedback.draw()
-  log("S1 Accuracy: "+str(s1accuracy3))
-  log("S6 Accuracy: "+str(s6accuracy3))
-  #win.flip()
-  #core.wait(5)
-  if s6accuracy3 < 0.65 or s1accuracy3 <0.75:
-    visual.TextStim(win,text="Please bring your administrator to continue.").draw()
-    win.flip()
-    event.waitKeys()
+      event.waitKeys(keyList=['space','q','escape'])
+    else:
+      break
   ###SECTION 3 PRACTICE END
 
   ###SECTION 3 BEGIN
@@ -941,10 +949,10 @@ def main(argv):
                                           "Similar to before, if you see an \'x\' you press 2, or if you see a \'z\' press 0. \n"+
                                           "3. Afterwards, a number will be presented on screen. "+
                                           "If you saw this number in the original set (before the letters), press 2. Otherwise, press 0. "+
-                                          "\n\nPress any key to continue.",wrapWidth=40,color="LightGray")
+                                          "\n\nPress spacebar to continue.",wrapWidth=40,color="LightGray")
   instructions.draw()
   win.flip()
-  event.waitKeys()
+  event.waitKeys(keyList=['space','q','escape'])
   condition_s3 = random.random() < 0.5
   log3_s1 = []
   log3_s6 = []
