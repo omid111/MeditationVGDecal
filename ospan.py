@@ -276,6 +276,8 @@ def main(argv):
         maxOspan[-1] = ss
         if ss < SET_SIZES[1]:
           ss += 1
+        else:
+          break
         numWrong = 0
       else:
         tempLog = "(False,"
