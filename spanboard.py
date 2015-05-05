@@ -188,6 +188,13 @@ def main(argv):
         maxSpanBoard[-1] = ss
         if ss < SET_SIZES[1]:
           ss+= 1
+        else:
+          core.wait(TONE_LENGTH)
+          visual.TextStim(win,text="This block is over. Your max Span-Board was {0}".format(maxSpanBoard[-1]) ).draw()
+          win.flip()
+          log("Max Span-Board Block "+str(i)+": " + str(maxSpanBoard[-1]))
+          core.wait(3)
+          break
         numWrong = 0
       else:
         losesound.play()

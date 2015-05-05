@@ -360,15 +360,15 @@ def main(argv):
           if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
             if 'z' == letter.text:
               if not nogo:
-                tempLog = "(True"
+                tempLog = "(True,go"
                 winsound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(1)
               else:
-                tempLog = "(False"
+                tempLog = "(False,nogo"
                 losesound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
-              tempLog = "(False"
+              tempLog = "(False," + ("nogo" if nogo else "go")
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
             pressed = True
@@ -376,15 +376,15 @@ def main(argv):
           elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
             if 'x' == letter.text:
               if not nogo:
-                tempLog = "(True"
+                tempLog = "(True,go"
                 winsound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(1)
               else:
-                tempLog = "(False"
+                tempLog = "(False,nogo"
                 losesound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
-              tempLog = "(False"
+              tempLog = "(False,"+ ("nogo" if nogo else "go")
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
             pressed = True
@@ -392,7 +392,7 @@ def main(argv):
           elif event.getKeys(keyList=['q','escape']):
             quit()
         if nogo and not pressed:
-          tempLog = "(True"
+          tempLog = "(True," + ("nogo" if nogo else "go")
           (log2_s1 if condition_s2 else log2_s6).append(1)
           winsound.play()
         elif not pressed:
@@ -488,15 +488,15 @@ def main(argv):
         if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
           if 'z' == letter.text:
             if not nogo:
-              tempLog = "(True"
+              tempLog = "(True,go"
               winsound.play()
               (log2_s1 if condition_s2 else log2_s6).append(1)
             else:
-              tempLog = "(False"
+              tempLog = "(False,nogo"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
           else:
-            tempLog = "(False"
+            tempLog = "(False," + ("nogo" if nogo else "go")
             losesound.play()
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
@@ -504,15 +504,15 @@ def main(argv):
         elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
           if 'x' == letter.text:
             if not nogo:
-              tempLog = "(True"
+              tempLog = "(True,go"
               winsound.play()
               (log2_s1 if condition_s2 else log2_s6).append(1)
             else:
-              tempLog = "(False"
+              tempLog = "(False,nogo"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
           else:
-            tempLog = "(False"
+            tempLog = "(False,"+ ("nogo" if nogo else "go")
             losesound.play()
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
@@ -520,7 +520,7 @@ def main(argv):
         elif event.getKeys(keyList=['q','escape']):
           quit()
       if nogo and not pressed:
-        tempLog = "(True"
+        tempLog = "(True," + ("nogo" if nogo else "go")
         (log2_s1 if condition_s2 else log2_s6).append(1)
         winsound.play()
       elif not pressed:
@@ -611,15 +611,15 @@ def main(argv):
           if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
             if 'z' == letter.text:
               if not nogo:
-                tempLog = "(True"
+                tempLog = "(True,go"
                 winsound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(1)
               else:
-                tempLog = "(False"
+                tempLog = "(False,nogo"
                 losesound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
-              tempLog = "(False"
+              tempLog = "(False," + ("nogo" if nogo else "go")
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
             pressed = True
@@ -627,15 +627,15 @@ def main(argv):
           elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
             if 'x' == letter.text:
               if not nogo:
-                tempLog = "(True"
+                tempLog = "(True,go"
                 winsound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(1)
               else:
-                tempLog = "(False"
+                tempLog = "(False,nogo"
                 losesound.play()
                 (log2_s1 if condition_s2 else log2_s6).append(0)
             else:
-              tempLog = "(False"
+              tempLog = "(False,"+ ("nogo" if nogo else "go")
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
             pressed = True
@@ -643,7 +643,7 @@ def main(argv):
           elif event.getKeys(keyList=['q','escape']):
             quit()
         if nogo and not pressed:
-          tempLog = "(True"
+          tempLog = "(True," + ("nogo" if nogo else "go")
           (log2_s1 if condition_s2 else log2_s6).append(1)
           winsound.play()
         elif not pressed:
@@ -739,15 +739,15 @@ def main(argv):
         if event.getKeys(keyList=['num_0','0','[0]']) and not pressed:
           if 'z' == letter.text:
             if not nogo:
-              tempLog = "(True"
+              tempLog = "(True,go"
               winsound.play()
               (log2_s1 if condition_s2 else log2_s6).append(1)
             else:
-              tempLog = "(False"
+              tempLog = "(False,nogo"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
           else:
-            tempLog = "(False"
+            tempLog = "(False," + ("nogo" if nogo else "go")
             losesound.play()
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
@@ -755,15 +755,15 @@ def main(argv):
         elif event.getKeys(keyList=['num_2','2','[2]']) and not pressed:
           if 'x' == letter.text:
             if not nogo:
-              tempLog = "(True"
+              tempLog = "(True,go"
               winsound.play()
               (log2_s1 if condition_s2 else log2_s6).append(1)
             else:
-              tempLog = "(False"
+              tempLog = "(False,nogo"
               losesound.play()
               (log2_s1 if condition_s2 else log2_s6).append(0)
           else:
-            tempLog = "(False"
+            tempLog = "(False,"+ ("nogo" if nogo else "go")
             losesound.play()
             (log2_s1 if condition_s2 else log2_s6).append(0)
           pressed = True
@@ -771,7 +771,7 @@ def main(argv):
         elif event.getKeys(keyList=['q','escape']):
           quit()
       if nogo and not pressed:
-        tempLog = "(True"
+        tempLog = "(True," + ("nogo" if nogo else "go")
         (log2_s1 if condition_s2 else log2_s6).append(1)
         winsound.play()
       elif not pressed:

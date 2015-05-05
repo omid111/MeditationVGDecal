@@ -199,6 +199,10 @@ def main(argv):
       else:
         if sscount >= 2:
           if lastss == FORWARD_RANGE[1]:
+            visual.TextStim(win,text="This block is over. Your max forward Digit-Span was {0}".format(maxForSpan[-1])).draw()
+            win.flip()
+            log("Max Forward Digit Span BLOCK "+str(block)+": " + str(maxForSpan[-1]))
+            core.wait(5)
             break
           else:
             ss2 = lastss + 1
@@ -298,6 +302,10 @@ def main(argv):
       else:
         if sscount >= 2:
           if lastss == REVERSE_RANGE[1]:
+            visual.TextStim(win,text="This block is over. Your max reverse Digit-Span was {0}".format(maxRevSpan[-1])).draw()
+            win.flip()
+            log("Max Reverse Digit Span BLOCK "+str(block)+": " + str(maxRevSpan[-1]))
+            core.wait(5)
             break
           else:
             ss2 = lastss + 1

@@ -277,6 +277,11 @@ def main(argv):
         if ss < SET_SIZES[1]:
           ss += 1
         else:
+          core.wait(TONE_LENGTH)
+          visual.TextStim(win,text="This block is over. Your max O-SPAN was {0}".format(maxOspan[-1])).draw()
+          win.flip()
+          log("Max O-SPAN: " + str(maxOspan[-1]))
+          core.wait(IN_BETWEEN_TRIALS_TIME*2)
           break
         numWrong = 0
       else:
