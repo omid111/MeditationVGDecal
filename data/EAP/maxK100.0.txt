@@ -1,8 +1,0 @@
-# subject: EAP 
-# day: 1 
-# mode: capacity 
-# t_stim: 0.1 
-# date: 2012-09-25 
-#
-# Max Capacity 
-3.0
