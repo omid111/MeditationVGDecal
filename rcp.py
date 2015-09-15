@@ -64,22 +64,22 @@ DIGIT_SIZES = [1.8,2.7,3.5,3.8,4.5] # display sizes in cm
 FIXATION_SIZE = 0.3
 FIXATION_TIME = 1.000
 # Experiment Practice
-NUM_PRACTICE_TRIALS = 12 #10   # per block
+NUM_PRACTICE_TRIALS = 12 #12   # per block
 NUM_PRACTICE_BLOCKS = 2
 # Experiment 1
 NUM_TRIALS_PER_BLOCK = 72  # 72
 NUM_BLOCKS = 2             # 10
-DISPLAY_TIME = 0.050 # time stimuli is displayed
+DISPLAY_TIME = 1.050 # time stimuli is displayed
 # Experiment 2
 NUM_TRIALS_PER_BLOCK2 = 48 # 48
-NUM_BLOCKS2 = 4            # 2
-DISPLAY_TIME2 = 0.100 # time stimuli is displayed
+NUM_BLOCKS2 = 2            # 2
+DISPLAY_TIME2 = 1.100 # time stimuli is displayed
 TIMEOUT = 3
 # Experiment 3
-NUM_TRIALS_PER_BLOCK3 = 48 # 50
-NUM_BLOCKS3 = 4
-DISPLAY_TIME3 = 0.050 # time stimuli is displayed
-NUMBER_DISPLAY_TIME = 0.500 # time numbers are displayed
+NUM_TRIALS_PER_BLOCK3 = 48 # 48
+NUM_BLOCKS3 = 2
+DISPLAY_TIME3 = 1.050 # time stimuli is displayed
+NUMBER_DISPLAY_TIME = 1.500 # time numbers are displayed
 MASK_TIME = 1.000
 # sound settings
 MAX_FAILS = 3
@@ -213,7 +213,7 @@ def main(argv):
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s1)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s1)+";"+str(timer.getTime()) + ")")
   core.wait(TONE_LENGTH)
   ### SECTION 1 PRACTICE END
 
@@ -260,11 +260,11 @@ def main(argv):
       while True:
         if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
-            tempLog = "(True, "
+            tempLog = "(True"
             winsound.play()
             (log_s1 if condition_s1 else log_s6).append(1)
           else:
-            tempLog = "(False, "
+            tempLog = "(False"
             losesound.play()
             (log_s1 if condition_s1 else log_s6).append(0)
           break
@@ -280,7 +280,7 @@ def main(argv):
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s1)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s1)+";"+str(timer.getTime()) + ")")
   core.wait(TONE_LENGTH)
   s1accuracy1= (1.0*sum(log_s1))/len(log_s1)
   s6accuracy1= (1.0*sum(log_s6))/len(log_s6)
@@ -398,7 +398,7 @@ def main(argv):
         elif not pressed:
           losesound.play()
           (log2_s1 if condition_s2 else log2_s6).append(0)
-        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()) + ")")
     core.wait(TONE_LENGTH)
     if len(log2_s1) > 0:
       s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -526,7 +526,7 @@ def main(argv):
       elif not pressed:
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()) + ")")
   core.wait(TONE_LENGTH)
   if len(log2_s1) > 0:
     s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -649,7 +649,7 @@ def main(argv):
         elif not pressed:
           losesound.play()
           (log2_s1 if condition_s2 else log2_s6).append(0)
-        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+        log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()) + ")")
     core.wait(TONE_LENGTH)
     if len(log2_s1) > 0:
       s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -777,7 +777,7 @@ def main(argv):
       elif not pressed:
         losesound.play()
         (log2_s1 if condition_s2 else log2_s6).append(0)
-      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(criticaldistractor.text)+";"+str(condition_s2)+";"+str(timer.getTime()) + ")")
   core.wait(TONE_LENGTH)
   if len(log2_s1) > 0:
     s1accuracy2 = (1.0*sum(log2_s1))/len(log2_s1)
@@ -864,11 +864,11 @@ def main(argv):
         while True:
           if event.getKeys(keyList=['num_0','0','[0]']):
             if 'z' in letters:
-              tempLog = "(True, "
+              tempLog = "(True"
               winsound.play()
               (log3_s1 if condition_s1 else log3_s6).append(1)
             else:
-              tempLog = "(False, "
+              tempLog = "(False"
               losesound.play()
               (log3_s1 if condition_s1 else log3_s6).append(0)
             break
@@ -884,7 +884,7 @@ def main(argv):
             break
           elif event.getKeys(keyList=['q','escape']):
             quit()
-        log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
+        log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()) + ")")
         #number probe working memory
         core.wait(TONE_LENGTH)
         ans_true = random.random() < 0.5
@@ -924,7 +924,7 @@ def main(argv):
             break
           elif event.getKeys(keyList=['q','escape']):
             quit()
-        log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()))
+        log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()) + ")")
         core.wait(TONE_LENGTH)
       condition_s3 = not condition_s3
     s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
@@ -1009,11 +1009,11 @@ def main(argv):
       while True:
         if event.getKeys(keyList=['num_0','0','[0]']):
           if 'z' in letters:
-            tempLog = "(True, "
+            tempLog = "(True"
             winsound.play()
             (log3_s1 if condition_s1 else log3_s6).append(1)
           else:
-            tempLog = "(False, "
+            tempLog = "(False"
             losesound.play()
             (log3_s1 if condition_s1 else log3_s6).append(0)
           break
@@ -1029,7 +1029,7 @@ def main(argv):
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letters)+";"+str(criticaldistractor.text)+";"+str(condition_s3)+";"+str(numbers)+";"+str(timer.getTime()) + ")")
       #number probe working memory
       core.wait(TONE_LENGTH)
       ans_true = random.random() < 0.5
@@ -1069,7 +1069,7 @@ def main(argv):
           break
         elif event.getKeys(keyList=['q','escape']):
           quit()
-      log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()))
+      log(tempLog+";"+str(letter.text)+";"+str(ans_true)+";"+str(timer.getTime()) + ")")
       core.wait(TONE_LENGTH)
     condition_s3 = not condition_s3
   s1accuracy3 = (1.0*sum(log3_s1))/len(log3_s1)
