@@ -69,17 +69,17 @@ NUM_PRACTICE_BLOCKS = 2
 # Experiment 1
 NUM_TRIALS_PER_BLOCK = 72  # 72
 NUM_BLOCKS = 2             # 10
-DISPLAY_TIME = 1.050 # time stimuli is displayed
+DISPLAY_TIME = 0.050 # time stimuli is displayed
 # Experiment 2
 NUM_TRIALS_PER_BLOCK2 = 48 # 48
 NUM_BLOCKS2 = 2            # 2
-DISPLAY_TIME2 = 1.100 # time stimuli is displayed
+DISPLAY_TIME2 = 0.100 # time stimuli is displayed
 TIMEOUT = 3
 # Experiment 3
 NUM_TRIALS_PER_BLOCK3 = 48 # 48
 NUM_BLOCKS3 = 2
-DISPLAY_TIME3 = 1.050 # time stimuli is displayed
-NUMBER_DISPLAY_TIME = 1.500 # time numbers are displayed
+DISPLAY_TIME3 = 0.050 # time stimuli is displayed
+NUMBER_DISPLAY_TIME = 0.500 # time numbers are displayed
 MASK_TIME = 1.000
 # sound settings
 MAX_FAILS = 3
