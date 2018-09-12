@@ -121,8 +121,8 @@ def main(argv):
   log("TARGET: " + str(TARGET_DIGIT))
   win = visual.Window([800,600],monitor="testMonitor",units="cm",fullscr=True)
   mouse = event.Mouse(win=win)
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
+  winsound = sound.Sound(value=CORRECT_FREQ, secs=TONE_LENGTH)
+  losesound = sound.Sound(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   timer = core.Clock()
 
   ### SECTION 1 BEGIN

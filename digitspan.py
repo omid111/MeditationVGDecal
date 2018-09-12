@@ -132,8 +132,8 @@ def main(argv):
   log("Test Number: " + str(testNo))
   win = visual.Window([800,600],monitor="testMonitor",units="deg",fullscr=True)
   mouse = event.Mouse(win=win)
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH-0.1)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH-0.1)
+  winsound = sound.Sound(value=CORRECT_FREQ, secs=TONE_LENGTH-0.1)
+  losesound = sound.Sound(value=INCORRECT_FREQ, secs=TONE_LENGTH-0.1)
   loadSoundFiles()
   loadSequences()
 
@@ -410,7 +410,7 @@ def loadSoundFiles():
   """Load wav files from sounds directory for audio presentation."""
   global soundFiles
   for i in range(10):
-    soundFiles.append(sound.SoundPygame(value=str("sounds/female_"+str(i)+".wav")))
+    soundFiles.append(sound.Sound(value=str("sounds/female_"+str(i)+".wav")))
 
 def loadSequences():
   """Loads preset sequences into memory"""

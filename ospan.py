@@ -157,8 +157,8 @@ def main(argv):
   #make our monitor
   win = visual.Window([800,600],monitor="testMonitor",units="deg",fullscr=True)
   mouse = event.Mouse(win=win)
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
+  winsound = sound.Sound(value=CORRECT_FREQ, secs=TONE_LENGTH)
+  losesound = sound.Sound(value=INCORRECT_FREQ, secs=TONE_LENGTH)
 
   ### SECTION 1 BEGIN
   log("Section 1")
@@ -453,8 +453,8 @@ def mathQuestion(win,mouse,timelimit):
   """
   global lastMathProblem
   answer = -100
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
+  winsound = sound.Sound(value=CORRECT_FREQ, secs=TONE_LENGTH)
+  losesound = sound.Sound(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   while True: # no same math problem twice in a row.
     a = random.randint(LOWEST_NUMBER,HIGHEST_NUMBER)
     b = random.randint(LOWEST_NUMBER,HIGHEST_NUMBER)

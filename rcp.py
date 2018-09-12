@@ -134,8 +134,8 @@ def main(argv):
   log("Subject: " + initials)
   log("Test Number: " + str(testNo))
   win = visual.Window([800,600],monitor="testMonitor",units="deg",color="Black",fullscr=True)
-  winsound = sound.SoundPygame(value=CORRECT_FREQ, secs=TONE_LENGTH)
-  losesound = sound.SoundPygame(value=INCORRECT_FREQ, secs=TONE_LENGTH)
+  winsound = sound.Sound(value=CORRECT_FREQ, secs=TONE_LENGTH)
+  losesound = sound.Sound(value=INCORRECT_FREQ, secs=TONE_LENGTH)
   fixation = visual.Circle(win,radius=FIXATION_SIZE,fillColor="LightGray")
   go_color = "DarkMagenta"
   nogo_color = "DarkOrange"
